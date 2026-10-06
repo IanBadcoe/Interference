@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://hndjobykd584"]
+
+[ext_resource type="Texture2D" uid="uid://bjiuih0dyt52j" path="res://Assets/LaboratoryTileset.png" id="1_f5pp7"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4gjug"]
+
+[node name="Wall" type="Node2D" unique_id=993427772]
+
+[node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=1032681349]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=2008860817]
+shape = SubResource("RectangleShape2D_4gjug")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=320209804]
+texture = ExtResource("1_f5pp7")
+region_enabled = true
+region_rect = Rect2(0, 0, 10, 10)
