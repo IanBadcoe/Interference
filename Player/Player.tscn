@@ -1,9 +1,9 @@
 [gd_scene format=3 uid="uid://d1p364uesn232"]
 
 [ext_resource type="Texture2D" uid="uid://uiyua6201q3g" path="res://Assets/Scientists.png" id="1_3qydi"]
-[ext_resource type="Script" uid="uid://c4mj1nsfsl36l" path="res://Player/PlayerMovement.cs" id="1_q3lat"]
+[ext_resource type="Script" uid="uid://c4mj1nsfsl36l" path="res://Player/PlayerCharacter.cs" id="1_8g4oa"]
 [ext_resource type="Script" uid="uid://cpr3gjvuey02n" path="res://Player/PlayerAnimation.cs" id="4_ddoul"]
-[ext_resource type="Texture2D" uid="uid://mgpm7q7nhv6n" path="res://Assets/WhiteSquare.png" id="5_8g4oa"]
+[ext_resource type="Texture2D" uid="uid://c5ud41ehcfopt" path="res://Assets/Download-2--Streamline-Rounded-Streamline-Material-Free.png" id="5_6ysni"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_0j2ni"]
 size = Vector2(14, 20)
@@ -147,31 +147,31 @@ animations = [{
 "speed": 5.0
 }]
 
-[node name="CharacterBody2D" type="CharacterBody2D" unique_id=1136591452 node_paths=PackedStringArray("Camera", "HoldSlot")]
-script = ExtResource("1_q3lat")
+[node name="CharacterBody2D" type="CharacterBody2D" unique_id=1136591452 node_paths=PackedStringArray("Camera", "HoldSlot", "PlacementPreview")]
+z_index = 100
+script = ExtResource("1_8g4oa")
 Camera = NodePath("Camera2D")
 HoldSlot = NodePath("HoldSlot")
+PlacementPreview = NodePath("PlacementPreview")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=398430299]
 shape = SubResource("RectangleShape2D_0j2ni")
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1822860232 node_paths=PackedStringArray("PlayerMovement")]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1822860232 node_paths=PackedStringArray("Player")]
 position = Vector2(0, -6)
 sprite_frames = SubResource("SpriteFrames_4gjug")
 animation = &"idle"
 centered = false
 offset = Vector2(-16, -16)
 script = ExtResource("4_ddoul")
-PlayerMovement = NodePath("..")
+Player = NodePath("..")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=821619097]
 zoom = Vector2(2, 2)
 
 [node name="HoldSlot" type="Node2D" parent="." unique_id=1712876402]
 
-[node name="Sprite2D" type="Sprite2D" parent="HoldSlot" unique_id=1577594934]
-scale = Vector2(0.25, 0.25)
-texture = ExtResource("5_8g4oa")
-region_rect = Rect2(0, 0, 2, 2)
-
-[node name="Player" type="Node2D" parent="." unique_id=1153289481]
+[node name="PlacementPreview" type="Sprite2D" parent="." unique_id=979009321]
+self_modulate = Color(0, 0, 0, 1)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("5_6ysni")

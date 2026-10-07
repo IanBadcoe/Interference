@@ -4,6 +4,9 @@ using Interference;
 
 public partial class Grabbable : StaticBody2D
 {
+	[Export]
+	public CollisionShape2D PlacementTestShape { get; private set; }
+	
 	private uint _originalCollisionLayers = 0;
 	
 	// Called when the node enters the scene tree for the first time.

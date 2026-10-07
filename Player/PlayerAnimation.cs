@@ -1,11 +1,12 @@
 using Godot;
 using System;
 using System.Diagnostics;
+using Interference.Player;
 
 public partial class PlayerAnimation : AnimatedSprite2D
 {
 	[Export]
-	public Interference.Player.PlayerMovement PlayerMovement { get; set; }
+	public PlayerCharacter Player { get; set; }
 
 	[Export]
 	public float IdleAnimDelay { get; set; } = 5;
@@ -15,7 +16,7 @@ public partial class PlayerAnimation : AnimatedSprite2D
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		Debug.Assert(PlayerMovement != null);
+		Debug.Assert(Player != null);
 
 		_idleAnimTimer = new Timer();
 		_idleAnimTimer.WaitTime = IdleAnimDelay;
@@ -40,12 +41,12 @@ public partial class PlayerAnimation : AnimatedSprite2D
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
-		if (PlayerMovement.Velocity.Length() > 0)
+		if (Player.Velocity.Length() > 0)
 		{
 			Animation = "run";
 			Play(customSpeed: 2);
 
-			FlipH = PlayerMovement.Velocity.X < 0;
+			FlipH = Player.Velocity.X < 0;
 
 			_idleAnimTimer.Stop();
 		}

@@ -6,10 +6,11 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4gjug"]
 size = Vector2(16, 16)
 
-[node name="StaticBody2D" type="StaticBody2D" unique_id=624355238]
+[node name="StaticBody2D" type="StaticBody2D" unique_id=624355238 node_paths=PackedStringArray("PlacementTestShape")]
 collision_layer = 3
 collision_mask = 0
 script = ExtResource("1_fcmk4")
+PlacementTestShape = NodePath("CollisionShape2D")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=792383804]
 texture = ExtResource("1_04sda")

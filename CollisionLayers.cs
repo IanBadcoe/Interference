@@ -7,7 +7,7 @@ namespace Interference;
 /// godot project settings
 /// </summary>
 [Flags]
-public enum CollisionLayer
+public enum CollisionLayers
 {
     PlayerMovement = 1,
     Usable = 2
