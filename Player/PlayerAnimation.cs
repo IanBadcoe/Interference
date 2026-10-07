@@ -5,7 +5,7 @@ using System.Diagnostics;
 public partial class PlayerAnimation : AnimatedSprite2D
 {
 	[Export]
-	public PlayerMovement PlayerMovement { get; set; }
+	public Interference.Player.PlayerMovement PlayerMovement { get; set; }
 
 	[Export]
 	public float IdleAnimDelay { get; set; } = 5;
