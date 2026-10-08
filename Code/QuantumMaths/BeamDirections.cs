@@ -6,10 +6,10 @@ public static class BeamDirections
 {
     public enum Direction
     {
-        Right,
-        Up,
-        Left,
-        Down,
+        Right = 0,
+        Up = 1,
+        Left = 2,
+        Down = 3,
     }
 
     public static IEnumerable<Direction> AllDirections => [ Direction.Right, Direction.Up, Direction.Left, Direction.Down ];

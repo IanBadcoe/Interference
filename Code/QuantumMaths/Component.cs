@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using System.Reflection.Metadata;
 using MathNet.Numerics.LinearAlgebra.Complex;
@@ -12,6 +13,12 @@ public abstract class Component
 {
     public const double ConvergenceThreshold = 0.001;
 
+    // Ports are named for the direction they face, not the direction of the beam they are receiving
+    // So InPorts[Right] receives a Left-going beam,
+    // and OutPorts[Right] emits a Right-going one
+    //
+    // (currently the only note of a beam direction is the orientation of the ports is connects
+    //  but if we need that in the Beam too, it should be trivial to add...)
     public PortsDict InPorts { get; set; } = new()
     {
         { BeamDirections.Direction.Right, null },
@@ -50,5 +57,23 @@ public abstract class Component
         }
 
         return ret;
+    }
+
+    protected State GatherInputs()
+    {
+        return new State(InPorts.OrderBy(x => x.Key).Select(x => x.Value != null ? x.Value.End : new Complex()));
+    }
+
+    protected void ScatterOutputs(State state)
+    {
+        foreach(var dir in BeamDirections.AllDirections)
+        {
+            var port = OutPorts[dir];
+
+            if (port != null)
+            {
+                port.Start = state[dir];
+            }
+        }
     }
 }

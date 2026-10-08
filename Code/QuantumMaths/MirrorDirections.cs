@@ -28,6 +28,35 @@ public static class MirrorDirections
     public static IEnumerable<Direction> AllDirections => [ Direction.Right, Direction.UpAndRight, Direction.Up, Direction.UpAndLeft,
                                                             Direction.Left, Direction.DownAndLeft, Direction.Down, Direction.DownAndRight ];
 
+    public static IEnumerable<Direction> OrthogonalDirections => [ Direction.Right, Direction.Up, Direction.Left, Direction.Down ];
+
+    public static IEnumerable<Direction> DiagonalDirections => [ Direction.UpAndRight, Direction.UpAndLeft, Direction.DownAndLeft, Direction.DownAndRight ];
+
+    public static IEnumerable<Direction> ReflectedDirections(Direction mirror_direction)
+    {
+        switch(mirror_direction)
+        {
+            case Direction.Right:
+                return [ Direction.DownAndRight, Direction.Right, Direction.UpAndRight ];
+            case Direction.UpAndRight:
+                return [ Direction.Right, Direction.Up ];
+            case Direction.Up:
+                return [ Direction.UpAndRight, Direction.Up, Direction.UpAndLeft ];
+            case Direction.UpAndLeft:
+                return [ Direction.Up, Direction.Left ];
+            case Direction.Left:
+                return [ Direction.UpAndLeft, Direction.Left, Direction.DownAndLeft ];
+            case Direction.DownAndLeft:
+                return [ Direction.Left, Direction.Down ];
+            case Direction.Down:
+                return [ Direction.DownAndLeft, Direction.Down, Direction.DownAndRight ];
+            case Direction.DownAndRight:
+                return [ Direction.Down, Direction.Right ];
+        }
+
+        return [];
+    }
+
     public static Matrix4x4 BuildMirrorMatrix(Direction direction, MirrorType type)
     {
         Complex[,] values = null;
