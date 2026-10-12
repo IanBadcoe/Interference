@@ -47,15 +47,9 @@ public class State
         InternalVector = old.Clone();
     }
 
-    public Complex this[int idx]
-    {
-        get => InternalVector[idx];
-    }
+    public Complex this[int idx] => InternalVector[idx];
 
-    public Complex this[BeamDirections.Direction dir]
-    {
-        get => this[(int)dir];
-    }
+    public Complex this[Directions.Direction dir] => this[(int)dir / 2];
 
     public static State operator +(State lhs, State rhs)
     {

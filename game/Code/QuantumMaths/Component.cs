@@ -2,12 +2,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using System.Reflection.Metadata;
+using Godot_Util;
 using MathNet.Numerics.LinearAlgebra.Complex;
 
 namespace Interference.Code.QuantumMaths;
 
-using PortsDict = Dictionary<BeamDirections.Direction, Beam>;
-using IReadonlyPortsDict = IReadOnlyDictionary<BeamDirections.Direction, Beam>;
+using PortsDict = Dictionary<Directions.Direction, Beam>;
+using IReadonlyPortsDict = IReadOnlyDictionary<Directions.Direction, Beam>;
 
 public abstract class Component
 {
@@ -21,39 +22,49 @@ public abstract class Component
     //  but if we need that in the Beam too, it should be trivial to add...)
     public PortsDict InPorts { get; set; } = new()
     {
-        { BeamDirections.Direction.Right, null },
-        { BeamDirections.Direction.Up, null },
-        { BeamDirections.Direction.Left, null },
-        { BeamDirections.Direction.Down, null },
+        { Directions.Direction.Right, null },
+        { Directions.Direction.Up, null },
+        { Directions.Direction.Left, null },
+        { Directions.Direction.Down, null },
     };
 
-    protected PortsDict OutPortsInternal = new()
+    public PortsDict OutPorts = new()
     {
-        { BeamDirections.Direction.Right, null },
-        { BeamDirections.Direction.Up, null },
-        { BeamDirections.Direction.Left, null },
-        { BeamDirections.Direction.Down, null },
+        { Directions.Direction.Right, null },
+        { Directions.Direction.Up, null },
+        { Directions.Direction.Left, null },
+        { Directions.Direction.Down, null },
     };
-    public IReadonlyPortsDict OutPorts => OutPortsInternal;
 
     // when the InPorts do not change between two evaluation cycles, then (according to this component, at least)
     // we have converged (but we need _all_ components to converge to really know)
-    readonly PortsDict InPortArchive = new();
-
+    readonly PortsDict OutPortArchive = new()
+    {
+        { Directions.Direction.Right, null },
+        { Directions.Direction.Up, null },
+        { Directions.Direction.Left, null },
+        { Directions.Direction.Down, null },
+    };
+    
     public abstract void Calculate();
 
     public bool IsConverged()
     {
         bool ret = true;
 
-        foreach(var dir in BeamDirections.AllDirections)
+        foreach(var dir in Directions.OrthogonalDirections)
         {
-            if ((InPortArchive[dir].Start - InPorts[dir].Start).Magnitude > ConvergenceThreshold)
+            var port = OutPorts[dir];
+            if (port == null) continue;
+            
+            var prev_port = OutPortArchive[dir];
+            if (prev_port == null
+                || (prev_port.Start - port.Start).Magnitude > ConvergenceThreshold)
             {
                 ret = false;
             }
 
-            InPortArchive[dir] = InPorts[dir];
+            OutPortArchive[dir] = port;
         }
 
         return ret;
@@ -61,12 +72,16 @@ public abstract class Component
 
     protected State GatherInputs()
     {
+        Util.Assert(InPorts.Count == 4);
+        
         return new State(InPorts.OrderBy(x => x.Key).Select(x => x.Value != null ? x.Value.End : new Complex()));
     }
 
     protected void ScatterOutputs(State state)
     {
-        foreach(var dir in BeamDirections.AllDirections)
+        Util.Assert(OutPorts.Count == 4);
+        
+        foreach(var dir in Directions.OrthogonalDirections)
         {
             var port = OutPorts[dir];
 

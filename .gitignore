@@ -6,3 +6,5 @@
 
 /tests/UnitTests/bin/Debug/net10.0/
 /tests/UnitTests/obj/
+
+**/*.user

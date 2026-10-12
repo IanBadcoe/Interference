@@ -3,7 +3,7 @@ using System.Numerics;
 
 namespace Interference.Code.QuantumMaths;
 
-public static class MirrorDirections
+public static class Directions
 {
     // opposite pairs, such as UpAndRight and DownAndLeft are equivalent if TwoSided is also set
     // otherwise, we only reflect in the direction given here

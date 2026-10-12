@@ -14,12 +14,12 @@ namespace Interference.Code.QuantumMaths;
 // the same; so it is the reverse of the port we're received by, allowing us to have two beams on the same port if necessary,
 // one arriving and one leaving (like with orthogonal reflection, boing: |<--->)
 
-public class Beam(Component from, Component to, float length, BeamDirections.Direction direction)
+public class Beam(Component from, Component to, float length /*, BeamDirections.Direction direction*/)
 {
     public Component From { get; private init; } = from;
     public Component To { get; private init; } = to;
     public float Length { get; private init; } = length;    ///< in wavelengths, so that the phase shift is this * 2Pi
-    public BeamDirections.Direction Direction { get; private init; } = direction;
+//    public BeamDirections.Direction Direction { get; private init; } = direction;
 
     public Complex Start { get; set; }
     public Complex End => Calculator.MoveForward(Start, Length);

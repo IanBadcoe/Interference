@@ -52,15 +52,15 @@ public static class Calculator
     #region Testing
     // public static void UnitTest()
     // {
-    //     foreach(var dir in MirrorDirections.AllDirections)
+    //     foreach(var dir in Directions.AllDirections)
     //     {
-    //         MirrorDirections.Direction[] reflect_dirs = [.. MirrorDirections.ReflectedDirections(dir)];
+    //         Directions.Direction[] reflect_dirs = [.. Directions.ReflectedDirections(dir)];
 
-    //         foreach(var test_dir in MirrorDirections.OrthogonalDirections.Where(x => !reflect_dirs.Contains(x)))
+    //         foreach(var test_dir in Directions.OrthogonalDirections.Where(x => !reflect_dirs.Contains(x)))
     //         {
-    //             FullMirror fm = new(dir, MirrorDirections.MirrorType.OneSided);
+    //             FullMirror fm = new(dir, Directions.MirrorType.OneSided);
 
-    //             if (MirrorDirections.IsDiagonal(dir))
+    //             if (Directions.IsDiagonal(dir))
     //             {
 
     //             }
