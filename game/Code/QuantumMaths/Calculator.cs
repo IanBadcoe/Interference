@@ -35,11 +35,11 @@ public static class Calculator
 
     public static Complex MoveForward(Complex state, float distance)
     {
-        float phase_shift = (distance - Mathf.Floor(distance)) * 2 * Mathf.Pi;
+        var phase_shift = (distance - Mathf.Floor(distance)) * 2 * Mathf.Pi;
 
-        Complex ret_state = state;
+        var ret_state = state;
 
-        if (phase_shift != 0)   ///< let's avoid rounding errors if we do not need to do a calculation
+        if (phase_shift != 0)   // let's avoid rounding errors if we do not need to do a calculation
         {
             ret_state *= Complex.FromPolarCoordinates(1.0, phase_shift);
         }
@@ -47,6 +47,20 @@ public static class Calculator
         return ret_state;
     }
 
+    public static Complex MoveBackwards(Complex state, float distance)
+    {
+        var phase_shift = (distance - Mathf.Floor(distance)) * 2 * Mathf.Pi;
+
+        var ret_state = state;
+
+        if (phase_shift != 0)   // let's avoid rounding errors if we do not need to do a calculation
+        {
+            ret_state *= Complex.FromPolarCoordinates(1.0, -phase_shift);
+        }
+
+        return ret_state;
+    }
+    
     #region Testing
     // public static void UnitTest()
     // {

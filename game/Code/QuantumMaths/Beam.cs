@@ -20,5 +20,5 @@ public class Beam(Component from, Component to, float length /*, BeamDirections.
 //    public BeamDirections.Direction Direction { get; private init; } = direction;
 
     public Complex Start { get; set; }
-    public Complex End => Calculator.MoveForward(Start, Length);
+    public Complex End => Calculator.MoveBackwards(Start, Length);
 }

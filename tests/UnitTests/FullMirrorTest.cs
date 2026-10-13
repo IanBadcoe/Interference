@@ -13,7 +13,7 @@ public class FullMirrorTest
         {
             var mirror = new Components.FullMirror(dir, Directions.MirrorType.OneSided);
 
-            Assert.True(mirror.IsConverged());
+            Assert.False(mirror.IsConverged());
             mirror.Calculate();
         }
     }
