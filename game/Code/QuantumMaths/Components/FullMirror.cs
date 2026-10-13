@@ -1,7 +1,3 @@
-using System;
-using System.Numerics;
-using MathNet.Numerics.LinearAlgebra;
-
 namespace Interference.Code.QuantumMaths.Components;
 
 public class FullMirror(Directions.Direction direction, Directions.MirrorType type) : Component
@@ -11,7 +7,7 @@ public class FullMirror(Directions.Direction direction, Directions.MirrorType ty
 
     Matrix4x4 Matrix => Directions.BuildMirrorMatrix(Direction, Type);
 
-    public override void Calculate()
+    protected override void CalculateInner()
     {
         var state = GatherInputs();
 

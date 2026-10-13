@@ -1,6 +1,4 @@
 using Godot;
-using System;
-using Interference;
 
 public partial class Grabbable : StaticBody2D
 {

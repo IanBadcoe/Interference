@@ -1,14 +1,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
-using System.Reflection.Metadata;
 using Godot_Util;
-using MathNet.Numerics.LinearAlgebra.Complex;
 
 namespace Interference.Code.QuantumMaths;
 
 using PortsDict = Dictionary<Directions.Direction, Beam>;
-using IReadonlyPortsDict = IReadOnlyDictionary<Directions.Direction, Beam>;
 
 public abstract class Component
 {
@@ -45,12 +42,26 @@ public abstract class Component
         { Directions.Direction.Left, null },
         { Directions.Direction.Down, null },
     };
-    
-    public abstract void Calculate();
 
-    public bool IsConverged()
+    protected bool HasCalculated { get; private set; }
+
+    public void Calculate()
     {
-        bool ret = true;
+        CalculateInner();
+
+        HasCalculated = true;
+    }
+    
+    protected abstract void CalculateInner();
+
+    public virtual bool IsConverged()
+    {
+        if (!HasCalculated)
+        {
+            return false;
+        }
+        
+        var ret = true;
 
         foreach(var dir in Directions.OrthogonalDirections)
         {

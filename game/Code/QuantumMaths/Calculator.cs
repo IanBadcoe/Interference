@@ -1,9 +1,7 @@
 using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
 using Godot;
 using Interference.Code.QuantumMaths;
-using Interference.Code.QuantumMaths.Components;
 
 public static class Calculator
 {

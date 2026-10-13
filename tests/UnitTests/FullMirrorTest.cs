@@ -1,5 +1,4 @@
 ﻿using System.Numerics;
-using Godot;
 using Interference.Code.QuantumMaths;
 using Components = Interference.Code.QuantumMaths.Components;
 
@@ -7,6 +6,18 @@ namespace UnitTests;
 
 public class FullMirrorTest
 {
+    [Fact]
+    public void NullsInOutNoCrashTest()
+    {
+        foreach (var dir in Directions.OrthogonalDirections)
+        {
+            var mirror = new Components.FullMirror(dir, Directions.MirrorType.OneSided);
+
+            Assert.True(mirror.IsConverged());
+            mirror.Calculate();
+        }
+    }
+
     [Fact]
     public void OrthogonalReflectOneSideTest()
     {
