@@ -31,6 +31,11 @@ public class Matrix4x4
         return new(lhs.Matrix + rhs.Matrix);
     }
 
+    public static Matrix4x4 operator -(Matrix4x4 lhs, Matrix4x4 rhs)
+    {
+        return new(lhs.Matrix - rhs.Matrix);
+    }
+
     public static State operator *(Matrix4x4 lhs, State rhs)
     {
         return new State(lhs.Matrix * rhs.Vector);
