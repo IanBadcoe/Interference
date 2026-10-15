@@ -1,7 +1,6 @@
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Numerics;
-using Godot_Util;
+using Godot;
 
 namespace Interference.Code.QuantumMaths;
 
@@ -54,7 +53,7 @@ public static class Directions
     {
         // array rows and columns are in the order Right, Up, Left, Down...
 
-        Complex[,] values = direction switch
+        var values = direction switch
         {
             Direction.Right => new Complex[,]
             {
@@ -149,5 +148,24 @@ public static class Directions
         }
 
         return (Direction)(((int)dir - (step % 8) + 8) % 8);
+    }
+
+    public static Matrix4x4 BuildSplitterMatrix(Direction direction)
+    {
+        return (BuildMirrorMatrix(direction, MirrorType.TwoSided)
+                + BuildTransmissionMatrix()) / Mathf.Sqrt2;
+    }
+
+    public static Matrix4x4 BuildTransmissionMatrix()
+    {
+        var values = new Complex[,]
+        {
+            { Complex.Zero, Complex.Zero,  Complex.One, Complex.Zero },
+            { Complex.Zero, Complex.Zero, Complex.Zero, Complex.One },
+            {  Complex.One, Complex.Zero, Complex.Zero, Complex.Zero },
+            { Complex.Zero,  Complex.One, Complex.Zero, Complex.Zero },
+        };
+
+        return new(values);
     }
 }

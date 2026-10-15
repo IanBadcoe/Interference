@@ -40,4 +40,14 @@ public class Matrix4x4
     {
         return new State(lhs.Matrix * rhs.Vector);
     }
+
+    public static Matrix4x4 operator *(Matrix4x4 lhs, Complex rhs)
+    {
+        return new Matrix4x4(lhs.Matrix * rhs);
+    }
+
+    public static Matrix4x4 operator /(Matrix4x4 lhs, Complex rhs)
+    {
+        return new Matrix4x4(lhs.Matrix / rhs);
+    }
 }
