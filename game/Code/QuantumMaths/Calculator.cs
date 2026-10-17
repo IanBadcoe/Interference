@@ -1,19 +1,25 @@
 using System.Collections.Generic;
 using System.Numerics;
 using Godot;
-using Interference.Code.QuantumMaths;
+
+namespace Interference.Code.QuantumMaths;
 
 public static class Calculator
 {
-    public static void Calculate(IEnumerable<Component> components)
+    const int MAX_PASSES = 100;
+    
+    public static int Calculate(ICollection<Component> components)
     {
-        while(!CalculationStep(components))
-            ;
+        var count = 0;
+        while(!CalculationStep(components) && count < MAX_PASSES)
+            count++;
+
+        return count;
     }
 
-    private static bool CalculationStep(IEnumerable<Component> components)
+    private static bool CalculationStep(ICollection<Component> components)
     {
-        bool completed = true;
+        var completed = true;
 
         foreach(var comp in components)
         {
@@ -60,24 +66,4 @@ public static class Calculator
 
         return ret_state;
     }
-    
-    #region Testing
-    // public static void UnitTest()
-    // {
-    //     foreach(var dir in Directions.AllDirections)
-    //     {
-    //         Directions.Direction[] reflect_dirs = [.. Directions.ReflectedDirections(dir)];
-
-    //         foreach(var test_dir in Directions.OrthogonalDirections.Where(x => !reflect_dirs.Contains(x)))
-    //         {
-    //             FullMirror fm = new(dir, Directions.MirrorType.OneSided);
-
-    //             if (Directions.IsDiagonal(dir))
-    //             {
-
-    //             }
-    //         }
-    //     }
-    // }
-    #endregion Testing
 }
