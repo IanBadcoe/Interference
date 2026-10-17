@@ -6,7 +6,6 @@ namespace UnitTests;
 
 using PortsDict = System.Collections.Generic.Dictionary<Directions.Direction, Beam>;
 
-
 internal class BeamSource4Tests(Directions.Direction direction, Complex state) : Components.BeamSource(direction, state)
 {
     public new PortsDict InPorts => InPortsInner;
@@ -16,17 +15,12 @@ internal class BeamSource4Tests(Directions.Direction direction, Complex state) :
 public class BeamSourceTest
 {
     [Fact]
-    public void BeamOutputNullTest()
+    public void DoesNotCrashWhenRunWithNoPortsConnected()
     {
         foreach (var dir in Directions.OrthogonalDirections)
         {
             var source = new Components.BeamSource(dir, new Complex(4, 3));
 
-            foreach (var other_dir in Directions.OrthogonalDirections)
-            {
-                Assert.Null(source.OutPorts[other_dir]);
-            }
-            
             Assert.False(source.IsConverged());
             
             source.Calculate();
@@ -35,7 +29,24 @@ public class BeamSourceTest
     }
 
     [Fact]
-    public void BeamOutputOutputTest()
+    public void DoesNotCreatePortsWhenRunWithNoPortsConnected()
+    {
+        foreach (var dir in Directions.OrthogonalDirections)
+        {
+            var source = new Components.BeamSource(dir, new Complex(4, 3));
+
+            source.Calculate();
+
+            foreach (var other_dir in Directions.OrthogonalDirections)
+            {
+                Assert.Null(source.OutPorts[other_dir]);
+                Assert.Null(source.InPorts[other_dir]);
+            }
+        }
+    }
+
+    [Fact]
+    public void ConvergesWhenCalculated()
     {
         foreach (var dir in Directions.OrthogonalDirections)
         {
@@ -49,10 +60,29 @@ public class BeamSourceTest
             source.OutPorts[dir] = new Beam(source, null, 1);
             
             Assert.False(source.IsConverged());
+
+            var passes = 0;
+            
+            while (!source.IsConverged())
+            {
+                source.Calculate();
+                
+                Assert.True(passes++ < 3);      // 3 should be plenty
+            }
+        }
+    }
+    
+    [Fact]
+    public void SetsOutputPortWhenCalculated()
+    {
+        foreach (var dir in Directions.OrthogonalDirections)
+        {
+            var source = new BeamSource4Tests(dir, new Complex(4, 3));
+
+            source.OutPorts[dir] = new Beam(source, null, 1);
             
             source.Calculate();
-            Assert.True(source.IsConverged());
-            
+
             Assert.Equal(source.OutPorts[dir].Start, new Complex(4, 3));
         }
     }
