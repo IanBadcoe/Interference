@@ -10,7 +10,7 @@ public class FullMirrorTest_OneSidedDiagonal
     {
         foreach (var dir in Directions.DiagonalDirections)
         {
-            var mirror = new Interference.Code.QuantumMaths.Components.FullMirror(dir, Directions.MirrorType.OneSided);
+            var mirror = new FullMirror4Tests(dir, Directions.MirrorType.OneSided);
 
             Assert.False(mirror.IsConverged());
             mirror.Calculate();
@@ -22,7 +22,7 @@ public class FullMirrorTest_OneSidedDiagonal
     {
         foreach (var dir in Directions.DiagonalDirections)
         {
-            var mirror = new Interference.Code.QuantumMaths.Components.FullMirror(dir, Directions.MirrorType.OneSided);
+            var mirror = new FullMirror4Tests(dir, Directions.MirrorType.OneSided);
 
             var beam_dir = Directions.Add(dir, 1);
             var beam_dir2 = Directions.Subtract(dir, 1);
@@ -56,7 +56,7 @@ public class FullMirrorTest_OneSidedDiagonal
     {
         foreach (var dir in Directions.DiagonalDirections)
         {
-            var mirror = new Interference.Code.QuantumMaths.Components.FullMirror(dir, Directions.MirrorType.OneSided);
+            var mirror = new FullMirror4Tests(dir, Directions.MirrorType.OneSided);
 
             var beam_dir = Directions.Add(dir, 1);
             var beam_dir2 = Directions.Subtract(dir, 1);
@@ -102,7 +102,7 @@ public class FullMirrorTest_OneSidedDiagonal
     {
         foreach (var dir in Directions.DiagonalDirections)
         {
-            var mirror = new Interference.Code.QuantumMaths.Components.FullMirror(dir, Directions.MirrorType.OneSided);
+            var mirror = new FullMirror4Tests(dir, Directions.MirrorType.OneSided);
 
             var beam_dir = Directions.Add(dir, 1);
             var beam_dir2 = Directions.Subtract(dir, 1);
@@ -127,14 +127,6 @@ public class FullMirrorTest_OneSidedDiagonal
             // (e.g. back-silvered...)
 
             // a diagonal mirror swaps beams coming in on each relevant orthogonal for an out beam on the other
-
-            mirror.Calculate();
-            Assert.False(mirror.IsConverged()); // we need a second pass to know
-            foreach (var bad_dir in
-                     Directions.OrthogonalDirections.Where(x => x != beam_dir && x != beam_dir2))
-            {
-                Assert.Equal(mirror.OutPorts[bad_dir].Start, new Complex());
-            }
 
             mirror.Calculate();
             Assert.True(mirror.IsConverged()); // now we know we're not changing anymore

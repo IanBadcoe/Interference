@@ -10,7 +10,7 @@ public class FullMirrorTest_OneSidedOrthogonal
     {
         foreach (var dir in Directions.OrthogonalDirections)
         {
-            var mirror = new Interference.Code.QuantumMaths.Components.FullMirror(dir, Directions.MirrorType.OneSided);
+            var mirror = new FullMirror4Tests(dir, Directions.MirrorType.OneSided);
 
             Assert.False(mirror.IsConverged());
             mirror.Calculate();
@@ -22,7 +22,7 @@ public class FullMirrorTest_OneSidedOrthogonal
     {
         foreach (var dir in Directions.OrthogonalDirections)
         {
-            var mirror = new Interference.Code.QuantumMaths.Components.FullMirror(dir, Directions.MirrorType.OneSided);
+            var mirror = new FullMirror4Tests(dir, Directions.MirrorType.OneSided);
 
             var in_beam = new Beam(null, mirror, 1)
             {
@@ -49,7 +49,7 @@ public class FullMirrorTest_OneSidedOrthogonal
     {
         foreach (var dir in Directions.OrthogonalDirections)
         {
-            var mirror = new Interference.Code.QuantumMaths.Components.FullMirror(dir, Directions.MirrorType.OneSided);
+            var mirror = new FullMirror4Tests(dir, Directions.MirrorType.OneSided);
 
             var in_beam = new Beam(null, mirror, 1)
             {
@@ -78,7 +78,7 @@ public class FullMirrorTest_OneSidedOrthogonal
     {
         foreach (var dir in Directions.OrthogonalDirections)
         {
-            var mirror = new Interference.Code.QuantumMaths.Components.FullMirror(dir, Directions.MirrorType.OneSided);
+            var mirror = new FullMirror4Tests(dir, Directions.MirrorType.OneSided);
 
             foreach(var in_dir in Directions.OrthogonalDirections)
             {
@@ -95,13 +95,6 @@ public class FullMirrorTest_OneSidedOrthogonal
                 mirror.OutPorts[bad_dir] = new Beam(mirror, null, 1);
             }
             
-            mirror.Calculate();
-            Assert.False(mirror.IsConverged()); // we need a second pass to know
-            foreach (var bad_dir in Directions.OrthogonalDirections.Where(x => x != dir))
-            {
-                Assert.Equal(mirror.OutPorts[bad_dir].Start, new Complex());
-            }
-
             mirror.Calculate();
             Assert.True(mirror.IsConverged()); // now we know we're not changing anymore
             foreach (var bad_dir in Directions.OrthogonalDirections.Where(x => x != dir))

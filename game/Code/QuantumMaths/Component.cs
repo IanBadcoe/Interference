@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
@@ -6,10 +7,12 @@ using Godot_Util;
 namespace Interference.Code.QuantumMaths;
 
 using PortsDict = Dictionary<Directions.Direction, Beam>;
+using ReadOnlyPortsDict = IReadOnlyDictionary<Directions.Direction, Beam>;
+using ComplexDict = Dictionary<Directions.Direction, Complex>;
 
 public abstract class Component
 {
-    public const double ConvergenceThreshold = 0.001;
+    const double ConvergenceThreshold = 0.001;
 
     // Ports are named for the direction they face, not the direction of the beam they are receiving
     // So InPorts[Right] receives a Left-going beam,
@@ -17,7 +20,7 @@ public abstract class Component
     //
     // (currently the only note of a beam direction is the orientation of the ports is connects
     //  but if we need that in the Beam too, it should be trivial to add...)
-    public PortsDict InPorts { get; set; } = new()
+    protected readonly PortsDict InPortsInner = new()
     {
         { Directions.Direction.Right, null },
         { Directions.Direction.Up, null },
@@ -25,22 +28,26 @@ public abstract class Component
         { Directions.Direction.Down, null },
     };
 
-    public PortsDict OutPorts = new()
+    public ReadOnlyPortsDict InPorts => InPortsInner;
+
+    protected readonly PortsDict OutPortsInner = new()
     {
         { Directions.Direction.Right, null },
         { Directions.Direction.Up, null },
         { Directions.Direction.Left, null },
         { Directions.Direction.Down, null },
     };
+    
+    public ReadOnlyPortsDict OutPorts => OutPortsInner;
 
     // when the InPorts do not change between two evaluation cycles, then (according to this component, at least)
     // we have converged (but we need _all_ components to converge to really know)
-    readonly PortsDict OutPortArchive = new()
+    readonly ComplexDict OutPortArchive = new()
     {
-        { Directions.Direction.Right, null },
-        { Directions.Direction.Up, null },
-        { Directions.Direction.Left, null },
-        { Directions.Direction.Down, null },
+        { Directions.Direction.Right, Complex.Zero },
+        { Directions.Direction.Up, Complex.Zero },
+        { Directions.Direction.Left, Complex.Zero },
+        { Directions.Direction.Down, Complex.Zero },
     };
 
     protected bool HasCalculated { get; private set; }
@@ -68,14 +75,13 @@ public abstract class Component
             var port = OutPorts[dir];
             if (port == null) continue;
             
-            var prev_port = OutPortArchive[dir];
-            if (prev_port == null
-                || (prev_port.Start - port.Start).Magnitude > ConvergenceThreshold)
+            var prev_port_start = OutPortArchive[dir];
+            if ((prev_port_start - port.Start).Magnitude > ConvergenceThreshold)
             {
                 ret = false;
             }
 
-            OutPortArchive[dir] = port;
+            OutPortArchive[dir] = port.Start;
         }
 
         return ret;
@@ -102,4 +108,71 @@ public abstract class Component
             }
         }
     }
+    
+#region Ports and Beams
+
+    public (Beam out_beam, Beam in_beam) Connect(
+        Component other,
+        Directions.Direction direction, float length)
+    {
+        var out_beam = OutConnectInternal(this, other, direction, length);
+        var in_beam = OutConnectInternal(other, this, Directions.Reverse(direction), length);
+
+        return (out_beam, in_beam);
+    }
+
+    // ONLY public for unit-testing, should not need in normal code
+    static Beam OutConnectInternal(Component start, Component end, Directions.Direction direction, float length)
+    {
+        if (start == null && end == null)
+        {
+            throw new ArgumentNullException(nameof(start), "Start and end cannot both be null");
+        }
+
+        var rev_direction = Directions.Reverse(direction);
+
+        end?.DisconnectIn(rev_direction);
+        start?.DisconnectOut(direction);
+
+        if (start == null || end == null)
+        {
+            return null;
+        }
+
+        var beam = new Beam(start, end, length);
+        start.OutPortsInner[direction] = beam;
+        end.InPortsInner[rev_direction] = beam;
+
+        return beam;
+    }
+
+    void DisconnectIn(Directions.Direction direction)
+    {
+        var existing_beam = InPorts[direction];
+
+        if (existing_beam != null)
+        {
+            existing_beam.From.OutPortsInner[Directions.Reverse(direction)] = null;
+        }
+        
+        InPortsInner[direction] = null;
+    }
+
+    void DisconnectOut(Directions.Direction direction)
+    {
+        var existing_beam = OutPorts[direction];
+
+        if (existing_beam != null)
+        {
+            existing_beam.To.InPortsInner[Directions.Reverse(direction)] = null;
+        }
+        
+        OutPortsInner[direction] = null;
+    }
+    
+    public void Disconnect(Directions.Direction direction)
+    {
+        Connect(null, direction, 0);
+    }
+#endregion Ports and Beams
 }

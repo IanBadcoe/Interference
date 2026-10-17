@@ -11,7 +11,7 @@ public class FullMirrorTest_TwoSidedDiagonal
     {
         foreach (var dir in Directions.DiagonalDirections)
         {
-            var mirror = new Components.FullMirror(dir, Directions.MirrorType.TwoSided);
+            var mirror = new FullMirror4Tests(dir, Directions.MirrorType.TwoSided);
 
             Assert.False(mirror.IsConverged());
             mirror.Calculate();
@@ -25,7 +25,7 @@ public class FullMirrorTest_TwoSidedDiagonal
         {
             var back_dir = Directions.Reverse(dir);
 
-            var mirror = new Components.FullMirror(dir, Directions.MirrorType.TwoSided);
+            var mirror = new FullMirror4Tests(dir, Directions.MirrorType.TwoSided);
 
             var beam_dir = Directions.Add(dir, 1);
             var beam_dir2 = Directions.Subtract(dir, 1);
@@ -60,7 +60,7 @@ public class FullMirrorTest_TwoSidedDiagonal
     {
         foreach (var dir in Directions.DiagonalDirections)
         {
-            var mirror = new Components.FullMirror(dir, Directions.MirrorType.TwoSided);
+            var mirror = new FullMirror4Tests(dir, Directions.MirrorType.TwoSided);
 
             var beam_dir = Directions.Add(dir, 1);
             var beam_dir2 = Directions.Subtract(dir, 1);
