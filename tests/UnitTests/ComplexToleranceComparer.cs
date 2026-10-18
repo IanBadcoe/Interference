@@ -3,7 +3,7 @@ using Godot;
 
 namespace UnitTests;
 
-public class ComplexToleranceComparer(float tolerance) : IEqualityComparer<Complex>
+public class ComplexToleranceComparer(float tolerance = 1e-6f) : IEqualityComparer<Complex>
 {
     public double Tolerance { get; } = tolerance;
 

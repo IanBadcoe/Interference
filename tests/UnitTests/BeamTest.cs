@@ -5,7 +5,7 @@ namespace UnitTests;
 
 public class BeamTest
 {
-    readonly ComplexToleranceComparer Tol = new(1e-6f);
+    readonly ComplexToleranceComparer Tol = new();
     
     [Fact]
     public void IntegerLengthBeamsDoNotShiftPhases()

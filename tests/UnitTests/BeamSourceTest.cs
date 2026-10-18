@@ -4,14 +4,6 @@ using Components = Interference.Code.QuantumMaths.Components;
 
 namespace UnitTests;
 
-using PortsDict = System.Collections.Generic.Dictionary<Directions.Direction, Beam>;
-
-internal class BeamSource4Tests(Directions.Direction direction, Complex state) : Components.BeamSource(direction, state)
-{
-    public new PortsDict InPorts => InPortsInner;
-    public new PortsDict OutPorts => OutPortsInner;
-}
-
 public class BeamSourceTest
 {
     [Fact]
