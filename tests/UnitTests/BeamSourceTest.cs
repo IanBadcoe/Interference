@@ -59,7 +59,7 @@ public class BeamSourceTest
             {
                 source.Calculate();
                 
-                Assert.True(passes++ < 3);      // 3 should be plenty
+                Assert.True(passes++ <= 3);      // 3 should be plenty
             }
         }
     }

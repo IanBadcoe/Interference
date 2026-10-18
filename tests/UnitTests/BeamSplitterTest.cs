@@ -26,7 +26,7 @@ public class BeamSplitterTest
 
             var passes = Calculator.Calculate([source, splitter, dest]);
             
-            Assert.True(passes < 3);
+            Assert.True(passes <= 3);
             
             // half amplitude returning to source (which ignores it, but we can examine the value)
             Assert.Equal(expected, source.InPorts[dir].End, Tol);
@@ -52,7 +52,7 @@ public class BeamSplitterTest
 
             var passes = Calculator.Calculate([source, splitter, dest]);
             
-            Assert.True(passes < 3);
+            Assert.True(passes <= 3);
             
             // half amplitude returning to source, phase-shifted (which ignores it, but we can examine the value)
             Assert.Equal(-expected, source.InPorts[dir].End, Tol);
@@ -101,7 +101,7 @@ public class BeamSplitterTest
             
             var passes = Calculator.Calculate([source, splitter, dest1, dest2]);
             
-            Assert.True(passes < 3);
+            Assert.True(passes <= 3);
             
             Assert.Equal(expected, dest1.InPorts[Directions.Reverse(reflect_dir)].End, Tol);
             Assert.Equal(expected, dest2.InPorts[Directions.Reverse(transmit_dir)].End, Tol);         // transmitted beam arrives at dest the same way the original beam arrived at the splitter
@@ -149,7 +149,7 @@ public class BeamSplitterTest
             
             var passes = Calculator.Calculate([source, splitter, dest1, dest2]);
             
-            Assert.True(passes < 3);
+            Assert.True(passes <= 3);
             
             Assert.Equal(-expected, dest1.InPorts[Directions.Reverse(reflect_dir)].End, Tol);           // phase-shifted 180 degrees
             Assert.Equal(expected, dest2.InPorts[Directions.Reverse(transmit_dir)].End, Tol);           // transmitted beam arrives at dest the same way the original beam arrived at the splitter

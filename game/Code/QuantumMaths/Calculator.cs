@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using Godot;
 
@@ -6,7 +7,7 @@ namespace Interference.Code.QuantumMaths;
 
 public static class Calculator
 {
-    const int MAX_PASSES = 100;
+    public const int MAX_PASSES = 100;
     
     public static int Calculate(ICollection<Component> components)
     {
@@ -19,22 +20,16 @@ public static class Calculator
 
     private static bool CalculationStep(ICollection<Component> components)
     {
-        var completed = true;
-
-        foreach(var comp in components)
+        foreach (var comp in components)
         {
-            if (!CalculateComponentStep(comp))
-            {
-                completed = false;
-            }
+            comp.Calculate();
         }
-
-        return completed;
+        
+        return components.Select(x => x.IsConverged()).All(x => x == true);
     }
 
     private static bool CalculateComponentStep(Component comp)
     {
-        comp.Calculate();
 
         return comp.IsConverged();
     }

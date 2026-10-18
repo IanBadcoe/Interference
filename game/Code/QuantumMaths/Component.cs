@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Numerics;
 using Godot_Util;
@@ -9,10 +10,14 @@ namespace Interference.Code.QuantumMaths;
 using PortsDict = Dictionary<Directions.Direction, Beam>;
 using ReadOnlyPortsDict = IReadOnlyDictionary<Directions.Direction, Beam>;
 using ComplexDict = Dictionary<Directions.Direction, Complex>;
+using ReadOnlyComplexDict = IReadOnlyDictionary<Directions.Direction, Complex>;
+using ComplexDictionaryKVP = KeyValuePair<Directions.Direction, Complex>;
 
 public abstract class Component
 {
     const double ConvergenceThreshold = 0.001;
+
+    static readonly ComplexToleranceComparer Tol = new();
 
     // Ports are named for the direction they face, not the direction of the beam they are receiving
     // So InPorts[Right] receives a Left-going beam,
@@ -40,9 +45,33 @@ public abstract class Component
     
     public ReadOnlyPortsDict OutPorts => OutPortsInner;
 
+    public ReadOnlyComplexDict InAmplitudes
+    {
+        get
+        {
+            return new ReadOnlyDictionary<Directions.Direction, Complex>(
+                new ComplexDict(InPorts.Select(x
+                    => new ComplexDictionaryKVP(x.Key, x.Value?.End ?? Complex.Zero))
+                )
+            );
+        }
+    }
+
+    public ReadOnlyComplexDict OutAmplitudes
+    {
+        get
+        {
+            return new ReadOnlyDictionary<Directions.Direction, Complex>(
+                new ComplexDict(OutPorts.Select(x
+                    => new ComplexDictionaryKVP(x.Key, x.Value?.Start ?? Complex.Zero))
+                )
+            );
+        }
+    }
+    
     // when the InPorts do not change between two evaluation cycles, then (according to this component, at least)
     // we have converged (but we need _all_ components to converge to really know)
-    readonly ComplexDict OutPortArchive = new()
+    readonly ComplexDict InPortArchive = new()
     {
         { Directions.Direction.Right, Complex.Zero },
         { Directions.Direction.Up, Complex.Zero },
@@ -72,16 +101,19 @@ public abstract class Component
 
         foreach(var dir in Directions.OrthogonalDirections)
         {
-            var port = OutPorts[dir];
-            if (port == null) continue;
+            var port = InPorts[dir];
+            if (port == null) continue;                             // InPorts with no Beam are fixed at zero
             
-            var prev_port_start = OutPortArchive[dir];
-            if ((prev_port_start - port.Start).Magnitude > ConvergenceThreshold)
+            var prev_port_start = InPortArchive[dir];       // initialized with zero, if we did not receive
+                                                                    // anything different to that, then we didn't
+                                                                    // change (yet)
+                                                                    
+            if (!Tol.Equals(prev_port_start, InPorts[dir].End))
             {
                 ret = false;
             }
 
-            OutPortArchive[dir] = port.Start;
+            InPortArchive[dir] = port.Start;
         }
 
         return ret;

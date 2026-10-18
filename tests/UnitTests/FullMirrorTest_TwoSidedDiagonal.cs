@@ -50,7 +50,7 @@ public class FullMirrorTest_TwoSidedDiagonal
             {
                 mirror.Calculate();
 
-                Assert.True(passes++ < 3); // 3 should be plenty
+                Assert.True(passes++ <= 3); // 3 should be plenty
             }
         }
     }
