@@ -10,5 +10,7 @@ namespace Interference;
 public enum CollisionLayers
 {
     PlayerMovement = 1,
-    Usable = 2
+    Usable = 2,
+    BeamObstruction = 4
 }
+

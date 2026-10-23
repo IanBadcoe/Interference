@@ -1,8 +1,7 @@
 namespace Interference.Code.QuantumMaths.Components;
 
-public class FullMirror(Directions.Direction direction, Directions.MirrorType type) : Component
+public class FullMirror(Directions.Direction direction, Directions.MirrorType type) : Component(direction)
 {
-    public Directions.Direction Direction { get; private init; } = direction;
     public Directions.MirrorType Type { get; private init; } = type;
 
     Matrix4x4 Matrix => Directions.BuildMirrorMatrix(Direction, Type);

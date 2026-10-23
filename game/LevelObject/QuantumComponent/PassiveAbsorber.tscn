@@ -1,0 +1,15 @@
+[gd_scene format=3 uid="uid://cix77tbbymy3y"]
+
+[ext_resource type="Script" uid="uid://dllx5ulm230ev" path="res://LevelObject/QuantumComponent/PassiveAbsorberComponent.cs" id="2_tii5n"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_76bvs"]
+size = Vector2(16, 16)
+
+[node name="PassiveAbsorber" type="StaticBody2D" unique_id=2139687194]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1800556427]
+visible = false
+shape = SubResource("RectangleShape2D_76bvs")
+
+[node name="AbsorberComponent" type="Node2D" parent="." unique_id=1382979587]
+script = ExtResource("2_tii5n")

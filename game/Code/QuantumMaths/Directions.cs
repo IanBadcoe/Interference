@@ -8,6 +8,8 @@ public static class Directions
 {
     // opposite pairs, such as UpAndRight and DownAndLeft are equivalent if TwoSided is also set
     // otherwise, we only reflect in the direction given here
+    // N.B. We only support beams going in orthogonal directions, the other directions are used to define component
+    // orientations only
     public enum Direction
     {
         Right = 0,          // |

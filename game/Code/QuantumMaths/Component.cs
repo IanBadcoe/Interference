@@ -13,7 +13,7 @@ using ComplexDict = Dictionary<Directions.Direction, Complex>;
 using ReadOnlyComplexDict = IReadOnlyDictionary<Directions.Direction, Complex>;
 using ComplexDictionaryKVP = KeyValuePair<Directions.Direction, Complex>;
 
-public abstract class Component
+public abstract class Component(Directions.Direction direction)
 {
     const double ConvergenceThreshold = 0.001;
 
@@ -80,6 +80,8 @@ public abstract class Component
     };
 
     protected bool HasCalculated { get; private set; }
+
+    public Directions.Direction Direction { get; } = direction;
 
     public void Calculate()
     {

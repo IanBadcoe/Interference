@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://b7ybgatj27wdr"]
+
+[ext_resource type="Script" uid="uid://b01ulqxkndy74" path="res://LevelObject/LaserBeam.cs" id="1_al3h1"]
+
+[node name="Beam" type="Node2D" unique_id=619421038 node_paths=PackedStringArray("_line")]
+script = ExtResource("1_al3h1")
+_line = NodePath("Line2D")
+
+[node name="Line2D" type="Line2D" parent="." unique_id=1815063772]
+width = 4.0

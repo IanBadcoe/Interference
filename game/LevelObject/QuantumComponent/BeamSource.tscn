@@ -1,0 +1,28 @@
+[gd_scene format=3 uid="uid://chsr7tx1suwls"]
+
+[ext_resource type="Script" uid="uid://bxop14lk431dn" path="res://LevelObject/Grabbable.cs" id="1_eptv8"]
+[ext_resource type="Texture2D" uid="uid://gsx4nbnw2mu" path="res://Assets/pixelart Chest pack/wooden box 1.png" id="1_fknhj"]
+[ext_resource type="Script" uid="uid://w6uthguig638" path="res://LevelObject/BeamSourceComponent.cs" id="3_6ghjb"]
+[ext_resource type="PackedScene" uid="uid://b7ybgatj27wdr" path="res://LevelObject/LaserBeam.tscn" id="4_5o0i6"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_eptv8"]
+size = Vector2(16, 16)
+
+[node name="BeamEmitter" type="StaticBody2D" unique_id=1103829487 node_paths=PackedStringArray("PlacementTestShape", "Sprite")]
+collision_layer = 7
+script = ExtResource("1_eptv8")
+PlacementTestShape = NodePath("CollisionShape2D")
+Sprite = NodePath("Sprite2D")
+RotationIncrementDegrees = 90
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=446234471]
+texture = ExtResource("1_fknhj")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=294154661]
+visible = false
+shape = SubResource("RectangleShape2D_eptv8")
+
+[node name="BeamComponent" type="Node2D" parent="." unique_id=755811565 node_paths=PackedStringArray("_objectRoot")]
+script = ExtResource("3_6ghjb")
+_objectRoot = NodePath("..")
+_laserBeam = ExtResource("4_5o0i6")

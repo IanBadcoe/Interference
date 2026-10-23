@@ -7,7 +7,7 @@
 size = Vector2(16, 16)
 
 [node name="StaticBody2D" type="StaticBody2D" unique_id=624355238 node_paths=PackedStringArray("PlacementTestShape", "Sprite")]
-collision_layer = 3
+collision_layer = 7
 collision_mask = 0
 script = ExtResource("1_fcmk4")
 PlacementTestShape = NodePath("CollisionShape2D")

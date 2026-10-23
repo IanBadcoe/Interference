@@ -25,7 +25,7 @@ public static class Calculator
             comp.Calculate();
         }
         
-        return components.Select(x => x.IsConverged()).All(x => x == true);
+        return components.All(x => x.IsConverged());
     }
 
     private static bool CalculateComponentStep(Component comp)

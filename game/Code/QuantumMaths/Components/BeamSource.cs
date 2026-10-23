@@ -2,9 +2,8 @@ using System.Numerics;
 
 namespace Interference.Code.QuantumMaths.Components;
 
-public class BeamSource(Directions.Direction direction, Complex state) : Component
+public class BeamSource(Directions.Direction direction, Complex state) : Component(direction)
 {
-    public Directions.Direction Direction { get; private init; } = direction;
     public Complex State { get; private init; } = state;
 
     public override bool IsConverged() => HasCalculated;        // we always converge after one pass as inputs are ignored

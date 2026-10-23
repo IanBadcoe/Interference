@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://b8vaeocy65trf"]
+
+[ext_resource type="Script" uid="uid://dkl1bbg3bf2ut" path="res://PackedScenes.cs" id="1_h5fdg"]
+[ext_resource type="PackedScene" uid="uid://chsr7tx1suwls" path="res://LevelObject/QuantumComponent/BeamSource.tscn" id="2_y2fl4"]
+[ext_resource type="PackedScene" uid="uid://b7ybgatj27wdr" path="res://LevelObject/LaserBeam.tscn" id="3_y2fl4"]
+
+[node name="PackedScenes" type="Node2D" unique_id=395032535]
+script = ExtResource("1_h5fdg")
+BeamSource = ExtResource("2_y2fl4")
+LaserBeam = ExtResource("3_y2fl4")
