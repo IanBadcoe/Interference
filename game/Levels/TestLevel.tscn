@@ -20,7 +20,7 @@ position = Vector2(-96, -96)
 [node name="Player" parent="." unique_id=1153289481 instance=ExtResource("1_uib4f")]
 
 [node name="BeamEmitter" parent="." unique_id=1103829487 instance=ExtResource("4_jyvk6")]
-position = Vector2(56, -64)
+position = Vector2(80, 0)
 
 [node name="BeamEmitter2" parent="." unique_id=105281779 instance=ExtResource("4_jyvk6")]
 position = Vector2(-40, -64)

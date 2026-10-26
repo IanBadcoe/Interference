@@ -50,6 +50,7 @@ public abstract partial class QuantumComponent : Node2D
     
     private void OnPutDown()
     {
+        Component.Direction = Quantum.FromGodotAngleDegrees(GetGlobalRotationDegrees());
         GetTree().CreateTimer(0.1, processInPhysics: true).Timeout += TraceForConnections;
     }
 

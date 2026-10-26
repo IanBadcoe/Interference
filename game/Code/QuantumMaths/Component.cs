@@ -81,7 +81,7 @@ public abstract class Component(Directions.Direction direction)
 
     protected bool HasCalculated { get; private set; }
 
-    public Directions.Direction Direction { get; } = direction;
+    public Directions.Direction Direction { get; set; } = direction;
 
     public void Calculate()
     {

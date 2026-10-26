@@ -7,7 +7,7 @@ public partial class BeamSourceComponent : QuantumComponent
 {
     public override void _Ready()
     {
-        Component = new BeamSource(Quantum.FromGodotAngleDegrees(GetGlobalRotation()), Complex.One);
+        Component = new BeamSource(Quantum.FromGodotAngleDegrees(GetGlobalRotationDegrees()), Complex.One);
         
         base._Ready();
     }

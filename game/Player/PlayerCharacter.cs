@@ -75,6 +75,24 @@ public partial class PlayerCharacter : CharacterBody2D
         {
             _attemptUse = true;
         }
+        else if (inputEvent.IsActionPressed(PlayerInputActions.RotateClockwise))
+        {
+            if (Held != null)
+            {
+                // To avoid potentially accumulating error, instead of just adding the increment to the current rotation,
+                // round the current rotation to the nearest increment first
+                var currentRotationIncrements = (int)Math.Round(Held.RotationDegrees / Held.RotationIncrementDegrees);
+                Held.RotationDegrees = (currentRotationIncrements + 1) * 90;
+            }
+        }
+        else if (inputEvent.IsActionPressed(PlayerInputActions.RotateAnticlockwise))
+        {
+            if (Held != null)
+            {
+                var currentRotationIncrements = (int)Math.Round(Held.RotationDegrees / Held.RotationIncrementDegrees);
+                Held.RotationDegrees = (currentRotationIncrements - 1) * 90;
+            }
+        }
     }
 
     public override void _Process(double delta)
