@@ -1,9 +1,10 @@
 using System.Numerics;
 using Interference.Code.QuantumMaths;
+using Interference.LevelObject.QuantumComponent;
 
 namespace UnitTests;
 
-public class FullMirrorTest_OneSidedDiagonal
+public partial class FullMirrorTestOneSidedDiagonal : QuantumComponent
 {
     [Fact]
     public void DoesNotCrashWithNullPorts()

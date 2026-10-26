@@ -82,7 +82,7 @@ public partial class PlayerCharacter : CharacterBody2D
                 // To avoid potentially accumulating error, instead of just adding the increment to the current rotation,
                 // round the current rotation to the nearest increment first
                 var currentRotationIncrements = (int)Math.Round(Held.RotationDegrees / Held.RotationIncrementDegrees);
-                Held.RotationDegrees = (currentRotationIncrements + 1) * 90;
+                Held.RotationDegrees = (currentRotationIncrements + 1) * Held.RotationIncrementDegrees;
             }
         }
         else if (inputEvent.IsActionPressed(PlayerInputActions.RotateAnticlockwise))
@@ -90,7 +90,7 @@ public partial class PlayerCharacter : CharacterBody2D
             if (Held != null)
             {
                 var currentRotationIncrements = (int)Math.Round(Held.RotationDegrees / Held.RotationIncrementDegrees);
-                Held.RotationDegrees = (currentRotationIncrements - 1) * 90;
+                Held.RotationDegrees = (currentRotationIncrements - 1) * Held.RotationIncrementDegrees;
             }
         }
     }

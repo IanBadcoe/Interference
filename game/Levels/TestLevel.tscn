@@ -5,6 +5,9 @@
 [ext_resource type="TileSet" uid="uid://dbawbtjdqbffb" path="res://Assets/Laboratory.tres" id="2_iqcmb"]
 [ext_resource type="PackedScene" uid="uid://dl2ypm2sc2tjk" path="res://LevelObject/Grabbable.tscn" id="3_y1yrn"]
 [ext_resource type="PackedScene" uid="uid://chsr7tx1suwls" path="res://LevelObject/QuantumComponent/BeamSource.tscn" id="4_jyvk6"]
+[ext_resource type="PackedScene" uid="uid://ywf4bpprikiy" path="res://LevelObject/QuantumComponent/BeamSplitter.tscn" id="6_voj1p"]
+[ext_resource type="PackedScene" uid="uid://mkf4keayogt0" path="res://LevelObject/QuantumComponent/OneSidedMirror.tscn" id="7_kxr0u"]
+[ext_resource type="PackedScene" uid="uid://dlrbihqywf4g3" path="res://LevelObject/QuantumComponent/TwoSidedMirror.tscn" id="8_kv5fy"]
 
 [node name="TestLevel" type="Node2D" unique_id=1527001300]
 script = ExtResource("1_2yvdw")
@@ -20,7 +23,16 @@ position = Vector2(-96, -96)
 [node name="Player" parent="." unique_id=1153289481 instance=ExtResource("1_uib4f")]
 
 [node name="BeamEmitter" parent="." unique_id=1103829487 instance=ExtResource("4_jyvk6")]
-position = Vector2(80, 0)
+position = Vector2(96, 112)
 
 [node name="BeamEmitter2" parent="." unique_id=105281779 instance=ExtResource("4_jyvk6")]
-position = Vector2(-40, -64)
+position = Vector2(-64, -64)
+
+[node name="BeamSplitter" parent="." unique_id=1068150894 instance=ExtResource("6_voj1p")]
+position = Vector2(-32, -32)
+
+[node name="OneSidedMirror" parent="." unique_id=2126690095 instance=ExtResource("7_kxr0u")]
+position = Vector2(32, -16)
+
+[node name="OneSidedMirror2" parent="." unique_id=728269202 instance=ExtResource("8_kv5fy")]
+position = Vector2(80, 16)
