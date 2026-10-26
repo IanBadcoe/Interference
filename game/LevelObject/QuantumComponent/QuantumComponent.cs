@@ -19,9 +19,7 @@ public abstract partial class QuantumComponent : Node2D
     protected Component Component;
 
 #nullable enable
-    private readonly Dictionary<Directions.Direction, (LaserBeam beam, QuantumComponent? component)> _connections = [];
-
-    private readonly List<PassiveAbsorber> _syntheticAbsorbers = [];
+    private readonly Dictionary<Directions.Direction, (LaserBeam beam, QuantumComponent? component, PassiveAbsorber? syntheticAbsorber)> _connections = [];
     
     public override void _Ready()
     {
@@ -64,14 +62,66 @@ public abstract partial class QuantumComponent : Node2D
         };
     }
 
-    private void ConnectInternal(Directions.Direction direction, LaserBeam beam, QuantumComponent? otherComponent)
+    /// <summary>
+    /// Sets up the connection to the given other component or to a new dummy PassiveAbsorber if otherComponent is null.
+    /// </summary>
+    private void ConnectInternal(Directions.Direction direction, Vector2 endPosition, QuantumComponent? otherComponent)
     {
-        if (_connections.TryGetValue(direction, out var tuple))
+        DisconnectInternal(direction);
+        otherComponent?.DisconnectInternal(Directions.Reverse(direction));
+        
+        var level = (Level)GetTree().CurrentScene;
+        
+        // Simulation library doesn't simulate a beam output that doesn't go to another component, so if the
+        // beam is hitting a wall or some other non-component blocker we create a PassiveAbsorber to be the other end
+        // This absorber doesn't need a godot scene, it's managed entirely by this component and is invisible to
+        // the outside world
+        
+        var otherInnerComponent = otherComponent?.Component;
+        PassiveAbsorber? absorber = null;
+        if (otherInnerComponent == null)
         {
-            tuple.beam.QueueFree();
+            absorber = new PassiveAbsorber();
+            level.QuantumComponents.Add(absorber);
         }
 
-        _connections[direction] = (beam, otherComponent);
+        var (beam1, beam2) = Component.Connect(otherInnerComponent ?? absorber, direction,
+            (GetGlobalPosition() - endPosition).Length());
+                
+        var laser = LaserBeam.Create(GetGlobalPosition(), endPosition, beam1, beam2);
+        GetTree().CurrentScene.AddChild(laser);
+
+        _connections[direction] = (laser, otherComponent, absorber);
+        if (otherComponent != null)
+        {
+            otherComponent._connections[Directions.Reverse(direction)] = (laser, this, null);
+        }
+        
+        level.MarkQuantumStateDirty();
+    }
+
+    private bool DisconnectInternal(Directions.Direction direction)
+    {
+        if (!_connections.TryGetValue(direction, out var tuple))
+        {
+            return false;
+        }
+
+        tuple.beam.QueueFree();
+        _connections.Remove(direction);
+        tuple.component?._connections.Remove(Directions.Reverse(direction));
+
+        var level = (Level)GetTree().CurrentScene;
+            
+        if (tuple.syntheticAbsorber != null)
+        {
+            level.QuantumComponents.Remove(tuple.syntheticAbsorber);
+        }
+            
+        level.MarkQuantumStateDirty();
+
+        return true;
+
     }
 
     private void ConnectedComponentsRetrace()
@@ -85,28 +135,10 @@ public abstract partial class QuantumComponent : Node2D
 
     private void DestroyConnectionState()
     {
-        var level = (Level)GetTree().CurrentScene;
-
-        foreach (var syntheticAbsorber in _syntheticAbsorbers)
-        {
-            level.QuantumComponents.Remove(syntheticAbsorber);
-        }
-
-        level.QuantumComponents.Remove(Component);
-
         foreach (var orthogonalDirection in Directions.OrthogonalDirections)
         {
-            if (_connections.TryGetValue(orthogonalDirection, out var tuple))
-            {
-                tuple.beam.QueueFree();
-                _connections.Remove(orthogonalDirection);
-                tuple.component?._connections.Remove(Directions.Reverse(orthogonalDirection));
-            }
-        
-            Component.Disconnect(orthogonalDirection);
+            DisconnectInternal(orthogonalDirection);
         }
-        
-        level.MarkQuantumStateDirty();
     }
 
     /// <summary>
@@ -131,41 +163,11 @@ public abstract partial class QuantumComponent : Node2D
 
             var otherComponent = result.collider?.Children<QuantumComponent>(true).FirstOrDefault();
             var direction = Quantum.FromGodotAngleDegrees(angle);
-            if (otherComponent == null)
-            {
-                // Simulation library doesn't simulate a beam output that doesn't go to another component, so if the
-                // beam is hitting a wall or some other non-component blocker we create a PassiveAbsorber to be the other end
-                // This absorber doesn't need a godot scene, it's managed entirely by this component and is invisible to
-                // the outside world
-                var absorber = new PassiveAbsorber();
-                var (beam1, beam2) = Component.Connect(absorber, direction,
-                    (GetGlobalPosition() - result.position).Length());
-                
-                var laser = LaserBeam.Create(GetGlobalPosition(), result.position, beam1, beam2);
-                GetTree().CurrentScene.AddChild(laser);
 
-                ConnectInternal(direction, laser, null);
-                
-                _syntheticAbsorbers.Add(absorber);
-            }
-            else
-            {
-                var (beam1, beam2) = Component.Connect(otherComponent.Component, direction,
-                    (GetGlobalPosition() - otherComponent.GetGlobalPosition()).Length());
-
-                var laser = LaserBeam.Create(GetGlobalPosition(), otherComponent.GetGlobalPosition(), beam1, beam2);
-                GetTree().CurrentScene.AddChild(laser);
-
-                ConnectInternal(direction, laser, otherComponent);
-                otherComponent.ConnectInternal(Directions.Reverse(direction), laser, this);
-            }
+            ConnectInternal(direction, otherComponent?.GetGlobalPosition() ?? result.position, otherComponent);
         }
 
         var level = (Level)GetTree().CurrentScene;
         level.QuantumComponents.Add(Component);
-        foreach (var syntheticAbsorber in _syntheticAbsorbers)
-        {
-            level.QuantumComponents.Add(syntheticAbsorber);
-        }
     }
 }

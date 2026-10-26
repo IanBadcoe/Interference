@@ -12,7 +12,7 @@ public static class Globals
     /// </summary>
     public static int CellSize => 16;
 
-    public static int MaxBeamDistance = 1280;
+    public static readonly int MaxBeamDistance = 1280;
 
     public static (Node2D collider, Vector2 position, int colliderId, Rid rid, Vector2 normal, int shapeIndex) ParseCollisionResult(Dictionary result)
     {
