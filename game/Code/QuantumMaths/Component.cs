@@ -20,27 +20,27 @@ public abstract class Component(Directions.Direction direction)
     static readonly ComplexToleranceComparer Tol = new();
 
     // Ports are named for the direction they face, not the direction of the beam they are receiving
-    // So InPorts[Right] receives a Left-going beam,
-    // and OutPorts[Right] emits a Right-going one
+    // So InPorts[E] receives a W-going beam,
+    // and OutPorts[E] emits a E-going one
     //
     // (currently the only note of a beam direction is the orientation of the ports is connects
     //  but if we need that in the Beam too, it should be trivial to add...)
     protected readonly PortsDict InPortsInner = new()
     {
-        { Directions.Direction.Right, null },
-        { Directions.Direction.Up, null },
-        { Directions.Direction.Left, null },
-        { Directions.Direction.Down, null },
+        { Directions.Direction.E, null },
+        { Directions.Direction.N, null },
+        { Directions.Direction.W, null },
+        { Directions.Direction.S, null },
     };
 
     public ReadOnlyPortsDict InPorts => InPortsInner;
 
     protected readonly PortsDict OutPortsInner = new()
     {
-        { Directions.Direction.Right, null },
-        { Directions.Direction.Up, null },
-        { Directions.Direction.Left, null },
-        { Directions.Direction.Down, null },
+        { Directions.Direction.E, null },
+        { Directions.Direction.N, null },
+        { Directions.Direction.W, null },
+        { Directions.Direction.S, null },
     };
     
     public ReadOnlyPortsDict OutPorts => OutPortsInner;
@@ -73,10 +73,10 @@ public abstract class Component(Directions.Direction direction)
     // we have converged (but we need _all_ components to converge to really know)
     readonly ComplexDict InPortArchive = new()
     {
-        { Directions.Direction.Right, Complex.Zero },
-        { Directions.Direction.Up, Complex.Zero },
-        { Directions.Direction.Left, Complex.Zero },
-        { Directions.Direction.Down, Complex.Zero },
+        { Directions.Direction.E, Complex.Zero },
+        { Directions.Direction.N, Complex.Zero },
+        { Directions.Direction.W, Complex.Zero },
+        { Directions.Direction.S, Complex.Zero },
     };
 
     protected bool HasCalculated { get; private set; }

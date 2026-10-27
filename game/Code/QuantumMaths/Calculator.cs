@@ -75,62 +75,64 @@ public static class Calculator
         return ret_state;
     }
     
+    // opposite pairs, such as NE and SW are equivalent if TwoSided is also set
+    // otherwise, we only reflect *to/from* the direction given here
     public static Matrix4x4 BuildMirrorMatrix(Directions.Direction direction, Calculator.MirrorType type)
     {
-        // array rows and columns are in the order Right, Up, Left, Down...
+        // array rows and columns are in the order E, N, W, S...
 
         var values = direction switch
         {
-            Directions.Direction.Right => new Complex[,]
+            Directions.Direction.E => new Complex[,]
             {
                 { Complex.One, Complex.Zero, Complex.Zero, Complex.Zero },
                 { Complex.Zero, Complex.Zero, Complex.Zero, Complex.Zero },
                 { Complex.Zero, Complex.Zero, Complex.Zero, Complex.Zero },
                 { Complex.Zero, Complex.Zero, Complex.Zero, Complex.Zero }
             },
-            Directions.Direction.UpAndRight => new Complex[,]
+            Directions.Direction.NE => new Complex[,]
             {
                 { Complex.Zero, Complex.One, Complex.Zero, Complex.Zero },
                 { Complex.One, Complex.Zero, Complex.Zero, Complex.Zero },
                 { Complex.Zero, Complex.Zero, Complex.Zero, Complex.Zero },
                 { Complex.Zero, Complex.Zero, Complex.Zero, Complex.Zero }
             },
-            Directions.Direction.Up => new Complex[,]
+            Directions.Direction.N => new Complex[,]
             {
                 { Complex.Zero, Complex.Zero, Complex.Zero, Complex.Zero },
                 { Complex.Zero, Complex.One, Complex.Zero, Complex.Zero },
                 { Complex.Zero, Complex.Zero, Complex.Zero, Complex.Zero },
                 { Complex.Zero, Complex.Zero, Complex.Zero, Complex.Zero }
             },
-            Directions.Direction.UpAndLeft => new Complex[,]
+            Directions.Direction.NW => new Complex[,]
             {
                 { Complex.Zero, Complex.Zero, Complex.Zero, Complex.Zero },
                 { Complex.Zero, Complex.Zero, Complex.One, Complex.Zero },
                 { Complex.Zero, Complex.One, Complex.Zero, Complex.Zero },
                 { Complex.Zero, Complex.Zero, Complex.Zero, Complex.Zero }
             },
-            Directions.Direction.Left => new Complex[,]
+            Directions.Direction.W => new Complex[,]
             {
                 { Complex.Zero, Complex.Zero, Complex.Zero, Complex.Zero },
                 { Complex.Zero, Complex.Zero, Complex.Zero, Complex.Zero },
                 { Complex.Zero, Complex.Zero, Complex.One, Complex.Zero },
                 { Complex.Zero, Complex.Zero, Complex.Zero, Complex.Zero }
             },
-            Directions.Direction.DownAndLeft => new Complex[,]
+            Directions.Direction.SW => new Complex[,]
             {
                 { Complex.Zero, Complex.Zero, Complex.Zero, Complex.Zero },
                 { Complex.Zero, Complex.Zero, Complex.Zero, Complex.Zero },
                 { Complex.Zero, Complex.Zero, Complex.Zero, Complex.One },
                 { Complex.Zero, Complex.Zero, Complex.One, Complex.Zero }
             },
-            Directions.Direction.Down => new Complex[,]
+            Directions.Direction.S => new Complex[,]
             {
                 { Complex.Zero, Complex.Zero, Complex.Zero, Complex.Zero },
                 { Complex.Zero, Complex.Zero, Complex.Zero, Complex.Zero },
                 { Complex.Zero, Complex.Zero, Complex.Zero, Complex.Zero },
                 { Complex.Zero, Complex.Zero, Complex.Zero, Complex.One }
             },
-            Directions.Direction.DownAndRight => new Complex[,]
+            Directions.Direction.SE => new Complex[,]
             {
                 { Complex.Zero, Complex.Zero, Complex.Zero, Complex.One },
                 { Complex.Zero, Complex.Zero, Complex.Zero, Complex.Zero },
@@ -174,28 +176,28 @@ public static class Calculator
 
         Complex[,] values = direction switch
         {
-            Directions.Direction.Right => new[,]
+            Directions.Direction.E => new[,]
             {
                 { Complex.One, Complex.Zero, Complex.ImaginaryOne, Complex.Zero },
                 { Complex.Zero, Complex.Zero, Complex.Zero, Complex.Zero },
                 { Complex.ImaginaryOne, Complex.Zero, Complex.One, Complex.Zero },
                 { Complex.Zero, Complex.Zero, Complex.Zero, Complex.Zero }
             },
-            Directions.Direction.UpAndRight => new[,]
+            Directions.Direction.NE => new[,]
             {
                 { Complex.Zero, Complex.ImaginaryOne, Complex.One, Complex.Zero },
                 { Complex.ImaginaryOne, Complex.Zero, Complex.Zero, Complex.One },
                 { Complex.One, Complex.Zero, Complex.Zero, Complex.ImaginaryOne },
                 { Complex.Zero, Complex.One, Complex.ImaginaryOne, Complex.Zero }
             },
-            Directions.Direction.Up => new[,]
+            Directions.Direction.N => new[,]
             {
                 { Complex.Zero, Complex.Zero, Complex.Zero, Complex.Zero },
                 { Complex.Zero, Complex.One, Complex.Zero, Complex.ImaginaryOne },
                 { Complex.Zero, Complex.Zero, Complex.Zero, Complex.Zero },
                 { Complex.Zero, Complex.ImaginaryOne, Complex.Zero, Complex.One }
             },
-            Directions.Direction.UpAndLeft => new[,]
+            Directions.Direction.NW => new[,]
             {
                 { Complex.Zero, Complex.Zero, Complex.One, Complex.ImaginaryOne },
                 { Complex.Zero, Complex.Zero, Complex.ImaginaryOne, Complex.One },

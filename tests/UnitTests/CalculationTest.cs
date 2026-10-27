@@ -15,13 +15,13 @@ public class CalculationTest
     {
         // [source]=-----\
         var amplitude = new Complex(3, 4);
-        var source = new BeamSource(Directions.Direction.Right, amplitude);
-        var target = new FullMirror(Directions.Direction.UpAndLeft, Calculator.MirrorType.TwoSided);
-        source.Connect(target, Directions.Direction.Right, 1);
+        var source = new BeamSource(Directions.Direction.E, amplitude);
+        var target = new FullMirror(Directions.Direction.NW, Calculator.MirrorType.TwoSided);
+        source.Connect(target, Directions.Direction.E, 1);
 
         Calculator.Calculate([source, target]);
         
-        Assert.Equal(target.InPorts[Directions.Direction.Left].Start, amplitude);
+        Assert.Equal(target.InPorts[Directions.Direction.W].Start, amplitude);
     }
     
     [Fact]
@@ -34,16 +34,16 @@ public class CalculationTest
 
         var amplitude = new Complex(3, 4);
         
-        var source = new BeamSource(Directions.Direction.Right, amplitude);
-        var mirror = new FullMirror(Directions.Direction.UpAndLeft, Calculator.MirrorType.TwoSided);
+        var source = new BeamSource(Directions.Direction.E, amplitude);
+        var mirror = new FullMirror(Directions.Direction.NW, Calculator.MirrorType.TwoSided);
         var absorber = new PassiveAbsorber();
         
-        source.Connect(mirror, Directions.Direction.Right, 1);
-        mirror.Connect(absorber, Directions.Direction.Up, 1);
+        source.Connect(mirror, Directions.Direction.E, 1);
+        mirror.Connect(absorber, Directions.Direction.N, 1);
 
         Calculator.Calculate([source, mirror, absorber]);
         
-        Assert.Equal(absorber.InPorts[Directions.Direction.Down].Start, amplitude);
+        Assert.Equal(absorber.InPorts[Directions.Direction.S].Start, amplitude);
     }
 
     [Fact]
