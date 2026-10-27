@@ -12,13 +12,13 @@ internal class BeamSource4Tests(Directions.Direction direction, Complex state) :
     public new PortsDict OutPorts => OutPortsInner;
 }
 
-internal class BeamSplitter4Tests(Directions.Direction direction) : BeamSplitter(direction)
+internal class BeamSplitter4Tests(Directions.Direction direction) : BeamSplitter(direction, Calculator.BeamSplitterType.HalfSilveredMirror)
 {
     public new PortsDict InPorts => InPortsInner;
     public new PortsDict OutPorts => OutPortsInner;
 }
 
-internal class FullMirror4Tests(Directions.Direction direction, Directions.MirrorType type) : FullMirror(direction, type)
+internal class FullMirror4Tests(Directions.Direction direction, Calculator.MirrorType type) : FullMirror(direction, type)
 {
     public new PortsDict InPorts => InPortsInner;
     public new PortsDict OutPorts => OutPortsInner;

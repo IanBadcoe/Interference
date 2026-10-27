@@ -17,7 +17,7 @@ public class BeamSplitterTest
             var rev_dir = Directions.Reverse(dir);
             var expected = Complex.One / Mathf.Sqrt2;
         
-            var splitter = new BeamSplitter(rev_dir);
+            var splitter = new BeamSplitter(rev_dir, Calculator.BeamSplitterType.HalfSilveredMirror);
             var source = new BeamSource(dir, Complex.One);
             var dest = new PassiveAbsorber();
 
@@ -43,7 +43,7 @@ public class BeamSplitterTest
             var rev_dir = Directions.Reverse(dir);
             var expected = Complex.One / Mathf.Sqrt2;
         
-            var splitter = new BeamSplitter(dir);
+            var splitter = new BeamSplitter(dir, Calculator.BeamSplitterType.HalfSilveredMirror);
             var source = new BeamSource(dir, Complex.One);
             var dest = new PassiveAbsorber();
 
@@ -91,7 +91,7 @@ public class BeamSplitterTest
             //   transmit_dir
             
             var source = new BeamSource(Directions.Reverse(in_dir), Complex.One);
-            var splitter = new BeamSplitter(dir);
+            var splitter = new BeamSplitter(dir, Calculator.BeamSplitterType.HalfSilveredMirror);
             var dest1 = new PassiveAbsorber();
             var dest2 = new PassiveAbsorber();
             
@@ -139,7 +139,7 @@ public class BeamSplitterTest
             //   transmit_dir
             
             var source = new BeamSource(Directions.Reverse(in_dir), Complex.One);
-            var splitter = new BeamSplitter(Directions.Reverse(dir));
+            var splitter = new BeamSplitter(Directions.Reverse(dir), Calculator.BeamSplitterType.HalfSilveredMirror);
             var dest1 = new PassiveAbsorber();
             var dest2 = new PassiveAbsorber();
             

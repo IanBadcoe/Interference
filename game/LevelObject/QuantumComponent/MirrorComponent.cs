@@ -7,7 +7,7 @@ namespace Interference.LevelObject.QuantumComponent;
 public partial class MirrorComponent : QuantumComponent
 {
     [Export]
-    private Directions.MirrorType MirrorType { get; set; }
+    private Calculator.MirrorType MirrorType { get; set; }
     
     public override void _Ready()
     {

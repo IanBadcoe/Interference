@@ -22,12 +22,6 @@ public static class Directions
         DownAndRight = 7    // \
     }
 
-    public enum MirrorType
-    {
-        OneSided,
-        TwoSided
-    }
-
     public static IEnumerable<Direction> AllDirections => [ Direction.Right, Direction.UpAndRight, Direction.Up, Direction.UpAndLeft,
                                                             Direction.Left, Direction.DownAndLeft, Direction.Down, Direction.DownAndRight ];
 
@@ -49,81 +43,6 @@ public static class Directions
             Direction.DownAndRight => [Direction.Down, Direction.Right],
             _ => []
         };
-    }
-
-    public static Matrix4x4 BuildMirrorMatrix(Direction direction, MirrorType type)
-    {
-        // array rows and columns are in the order Right, Up, Left, Down...
-
-        var values = direction switch
-        {
-            Direction.Right => new Complex[,]
-            {
-                { Complex.One, Complex.Zero, Complex.Zero, Complex.Zero },
-                { Complex.Zero, Complex.Zero, Complex.Zero, Complex.Zero },
-                { Complex.Zero, Complex.Zero, Complex.Zero, Complex.Zero },
-                { Complex.Zero, Complex.Zero, Complex.Zero, Complex.Zero }
-            },
-            Direction.UpAndRight => new Complex[,]
-            {
-                { Complex.Zero, Complex.One, Complex.Zero, Complex.Zero },
-                { Complex.One, Complex.Zero, Complex.Zero, Complex.Zero },
-                { Complex.Zero, Complex.Zero, Complex.Zero, Complex.Zero },
-                { Complex.Zero, Complex.Zero, Complex.Zero, Complex.Zero }
-            },
-            Direction.Up => new Complex[,]
-            {
-                { Complex.Zero, Complex.Zero, Complex.Zero, Complex.Zero },
-                { Complex.Zero, Complex.One, Complex.Zero, Complex.Zero },
-                { Complex.Zero, Complex.Zero, Complex.Zero, Complex.Zero },
-                { Complex.Zero, Complex.Zero, Complex.Zero, Complex.Zero }
-            },
-            Direction.UpAndLeft => new Complex[,]
-            {
-                { Complex.Zero, Complex.Zero, Complex.Zero, Complex.Zero },
-                { Complex.Zero, Complex.Zero, Complex.One, Complex.Zero },
-                { Complex.Zero, Complex.One, Complex.Zero, Complex.Zero },
-                { Complex.Zero, Complex.Zero, Complex.Zero, Complex.Zero }
-            },
-            Direction.Left => new Complex[,]
-            {
-                { Complex.Zero, Complex.Zero, Complex.Zero, Complex.Zero },
-                { Complex.Zero, Complex.Zero, Complex.Zero, Complex.Zero },
-                { Complex.Zero, Complex.Zero, Complex.One, Complex.Zero },
-                { Complex.Zero, Complex.Zero, Complex.Zero, Complex.Zero }
-            },
-            Direction.DownAndLeft => new Complex[,]
-            {
-                { Complex.Zero, Complex.Zero, Complex.Zero, Complex.Zero },
-                { Complex.Zero, Complex.Zero, Complex.Zero, Complex.Zero },
-                { Complex.Zero, Complex.Zero, Complex.Zero, Complex.One },
-                { Complex.Zero, Complex.Zero, Complex.One, Complex.Zero }
-            },
-            Direction.Down => new Complex[,]
-            {
-                { Complex.Zero, Complex.Zero, Complex.Zero, Complex.Zero },
-                { Complex.Zero, Complex.Zero, Complex.Zero, Complex.Zero },
-                { Complex.Zero, Complex.Zero, Complex.Zero, Complex.Zero },
-                { Complex.Zero, Complex.Zero, Complex.Zero, Complex.One }
-            },
-            Direction.DownAndRight => new Complex[,]
-            {
-                { Complex.Zero, Complex.Zero, Complex.Zero, Complex.One },
-                { Complex.Zero, Complex.Zero, Complex.Zero, Complex.Zero },
-                { Complex.Zero, Complex.Zero, Complex.Zero, Complex.Zero },
-                { Complex.One, Complex.Zero, Complex.Zero, Complex.Zero }
-            },
-            _ => null
-        };
-
-        var ret = new Matrix4x4(values);
-
-        if (type == MirrorType.TwoSided)
-        {
-            ret -= BuildMirrorMatrix(Reverse(direction), MirrorType.OneSided);
-        }
-
-        return ret;
     }
 
     public static Direction Reverse(Direction direction)
@@ -150,24 +69,5 @@ public static class Directions
         }
 
         return (Direction)(((int)dir - (step % 8) + 8) % 8);
-    }
-
-    public static Matrix4x4 BuildSplitterMatrix(Direction direction)
-    {
-        return (BuildMirrorMatrix(direction, MirrorType.TwoSided)
-                + BuildTransmissionMatrix()) / Mathf.Sqrt2;
-    }
-
-    public static Matrix4x4 BuildTransmissionMatrix()
-    {
-        var values = new Complex[,]
-        {
-            { Complex.Zero, Complex.Zero,  Complex.One, Complex.Zero },
-            { Complex.Zero, Complex.Zero, Complex.Zero, Complex.One },
-            {  Complex.One, Complex.Zero, Complex.Zero, Complex.Zero },
-            { Complex.Zero,  Complex.One, Complex.Zero, Complex.Zero },
-        };
-
-        return new(values);
     }
 }

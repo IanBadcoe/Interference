@@ -10,7 +10,7 @@ public class FullMirrorTest_OneSidedOrthogonal
     {
         foreach (var dir in Directions.OrthogonalDirections)
         {
-            var mirror = new FullMirror4Tests(dir, Directions.MirrorType.OneSided);
+            var mirror = new FullMirror4Tests(dir, Calculator.MirrorType.OneSided);
 
             Assert.False(mirror.IsConverged());
             mirror.Calculate();
@@ -22,7 +22,7 @@ public class FullMirrorTest_OneSidedOrthogonal
     {
         foreach (var dir in Directions.OrthogonalDirections)
         {
-            var mirror = new FullMirror4Tests(dir, Directions.MirrorType.OneSided);
+            var mirror = new FullMirror4Tests(dir, Calculator.MirrorType.OneSided);
 
             var in_beam = new Beam(null, mirror, 1)
             {
@@ -49,7 +49,7 @@ public class FullMirrorTest_OneSidedOrthogonal
     {
         foreach (var dir in Directions.OrthogonalDirections)
         {
-            var mirror = new FullMirror4Tests(dir, Directions.MirrorType.OneSided);
+            var mirror = new FullMirror4Tests(dir, Calculator.MirrorType.OneSided);
 
             var in_beam = new Beam(null, mirror, 1)
             {
@@ -78,7 +78,7 @@ public class FullMirrorTest_OneSidedOrthogonal
     {
         foreach (var dir in Directions.OrthogonalDirections)
         {
-            var mirror = new FullMirror4Tests(dir, Directions.MirrorType.OneSided);
+            var mirror = new FullMirror4Tests(dir, Calculator.MirrorType.OneSided);
 
             foreach(var in_dir in Directions.OrthogonalDirections)
             {

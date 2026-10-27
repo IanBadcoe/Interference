@@ -11,7 +11,7 @@ public partial class FullMirrorTestOneSidedDiagonal : QuantumComponent
     {
         foreach (var dir in Directions.DiagonalDirections)
         {
-            var mirror = new FullMirror4Tests(dir, Directions.MirrorType.OneSided);
+            var mirror = new FullMirror4Tests(dir, Calculator.MirrorType.OneSided);
 
             Assert.False(mirror.IsConverged());
             mirror.Calculate();
@@ -23,7 +23,7 @@ public partial class FullMirrorTestOneSidedDiagonal : QuantumComponent
     {
         foreach (var dir in Directions.DiagonalDirections)
         {
-            var mirror = new FullMirror4Tests(dir, Directions.MirrorType.OneSided);
+            var mirror = new FullMirror4Tests(dir, Calculator.MirrorType.OneSided);
 
             var beam_dir = Directions.Add(dir, 1);
             var beam_dir2 = Directions.Subtract(dir, 1);
@@ -57,7 +57,7 @@ public partial class FullMirrorTestOneSidedDiagonal : QuantumComponent
     {
         foreach (var dir in Directions.DiagonalDirections)
         {
-            var mirror = new FullMirror4Tests(dir, Directions.MirrorType.OneSided);
+            var mirror = new FullMirror4Tests(dir, Calculator.MirrorType.OneSided);
 
             var beam_dir = Directions.Add(dir, 1);
             var beam_dir2 = Directions.Subtract(dir, 1);
@@ -103,7 +103,7 @@ public partial class FullMirrorTestOneSidedDiagonal : QuantumComponent
     {
         foreach (var dir in Directions.DiagonalDirections)
         {
-            var mirror = new FullMirror4Tests(dir, Directions.MirrorType.OneSided);
+            var mirror = new FullMirror4Tests(dir, Calculator.MirrorType.OneSided);
 
             var beam_dir = Directions.Add(dir, 1);
             var beam_dir2 = Directions.Subtract(dir, 1);

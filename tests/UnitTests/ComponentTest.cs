@@ -9,8 +9,8 @@ public class ComponentTest
     public void ConnectionCreatesBeamsInBothDirections()
     {
         // any concrete derived class of Component will do...
-        Component comp1 = new FullMirror(Directions.Direction.Up, Directions.MirrorType.OneSided);
-        Component comp2 = new FullMirror(Directions.Direction.Up, Directions.MirrorType.OneSided);
+        Component comp1 = new FullMirror(Directions.Direction.Up, Calculator.MirrorType.OneSided);
+        Component comp2 = new FullMirror(Directions.Direction.Up, Calculator.MirrorType.OneSided);
         
         var (beam1, beam2) = comp1.Connect(comp2, Directions.Direction.Right, 1);
         
@@ -32,8 +32,8 @@ public class ComponentTest
     public void DisconnectionRemovesBeamsInBothDirections()
     {
         {
-            Component comp1 = new FullMirror(Directions.Direction.Up, Directions.MirrorType.OneSided);
-            Component comp2 = new FullMirror(Directions.Direction.Up, Directions.MirrorType.OneSided);
+            Component comp1 = new FullMirror(Directions.Direction.Up, Calculator.MirrorType.OneSided);
+            Component comp2 = new FullMirror(Directions.Direction.Up, Calculator.MirrorType.OneSided);
 
             comp1.Connect(comp2, Directions.Direction.Right, 1);
             comp1.Disconnect(Directions.Direction.Right);
@@ -44,8 +44,8 @@ public class ComponentTest
         
         {
             // shouldn't matter which component asks for the disconnection
-            Component comp1 = new FullMirror(Directions.Direction.Up, Directions.MirrorType.OneSided);
-            Component comp2 = new FullMirror(Directions.Direction.Up, Directions.MirrorType.OneSided);
+            Component comp1 = new FullMirror(Directions.Direction.Up, Calculator.MirrorType.OneSided);
+            Component comp2 = new FullMirror(Directions.Direction.Up, Calculator.MirrorType.OneSided);
 
             comp1.Connect(comp2, Directions.Direction.Right, 1);
             comp2.Disconnect(Directions.Direction.Left);
@@ -56,8 +56,8 @@ public class ComponentTest
         
         {
             // should work the same if we ask for a connection to null
-            Component comp1 = new FullMirror(Directions.Direction.Up, Directions.MirrorType.OneSided);
-            Component comp2 = new FullMirror(Directions.Direction.Up, Directions.MirrorType.OneSided);
+            Component comp1 = new FullMirror(Directions.Direction.Up, Calculator.MirrorType.OneSided);
+            Component comp2 = new FullMirror(Directions.Direction.Up, Calculator.MirrorType.OneSided);
 
             comp1.Connect(comp2, Directions.Direction.Right, 1);
             var (beam1, beam2) = comp1.Connect(null, Directions.Direction.Right, 0);
@@ -74,11 +74,11 @@ public class ComponentTest
     [Fact]
     public void ConnectionDisconnectsPreviouslyConnectedComponents()
     {
-        var prior_1 = new FullMirror(Directions.Direction.Up, Directions.MirrorType.OneSided);
-        var prior_2 = new FullMirror(Directions.Direction.Up, Directions.MirrorType.OneSided);
+        var prior_1 = new FullMirror(Directions.Direction.Up, Calculator.MirrorType.OneSided);
+        var prior_2 = new FullMirror(Directions.Direction.Up, Calculator.MirrorType.OneSided);
         
-        var comp1 = new FullMirror(Directions.Direction.Up, Directions.MirrorType.OneSided);
-        var comp2 = new FullMirror(Directions.Direction.Up, Directions.MirrorType.OneSided);
+        var comp1 = new FullMirror(Directions.Direction.Up, Calculator.MirrorType.OneSided);
+        var comp2 = new FullMirror(Directions.Direction.Up, Calculator.MirrorType.OneSided);
         
         comp1.Connect(prior_1, Directions.Direction.Right, 1);
         prior_2.Connect(comp2, Directions.Direction.Right, 1);
