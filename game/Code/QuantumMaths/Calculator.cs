@@ -169,7 +169,7 @@ public static class Calculator
     static Matrix4x4 BuildPrismCubeSplitterMatrix(Directions.Direction direction)
     {
         // complete 180 degree symmetry
-        if ((int)direction > 4)
+        if ((int)direction > 3)
         {
             direction = Directions.Subtract(direction, 4);
         }
@@ -178,9 +178,9 @@ public static class Calculator
         {
             Directions.Direction.E => new[,]
             {
-                { Complex.One, Complex.Zero, Complex.ImaginaryOne, Complex.Zero },
-                { Complex.Zero, Complex.Zero, Complex.Zero, Complex.Zero },
                 { Complex.ImaginaryOne, Complex.Zero, Complex.One, Complex.Zero },
+                { Complex.Zero, Complex.Zero, Complex.Zero, Complex.Zero },
+                { Complex.One, Complex.Zero, Complex.ImaginaryOne, Complex.Zero },
                 { Complex.Zero, Complex.Zero, Complex.Zero, Complex.Zero }
             },
             Directions.Direction.NE => new[,]
@@ -193,9 +193,9 @@ public static class Calculator
             Directions.Direction.N => new[,]
             {
                 { Complex.Zero, Complex.Zero, Complex.Zero, Complex.Zero },
-                { Complex.Zero, Complex.One, Complex.Zero, Complex.ImaginaryOne },
+                { Complex.Zero, Complex.ImaginaryOne, Complex.Zero, Complex.One },
                 { Complex.Zero, Complex.Zero, Complex.Zero, Complex.Zero },
-                { Complex.Zero, Complex.ImaginaryOne, Complex.Zero, Complex.One }
+                { Complex.Zero, Complex.One, Complex.Zero, Complex.ImaginaryOne }
             },
             Directions.Direction.NW => new[,]
             {

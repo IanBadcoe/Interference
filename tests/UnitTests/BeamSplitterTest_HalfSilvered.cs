@@ -5,7 +5,7 @@ using Interference.Code.QuantumMaths.Components;
 
 namespace UnitTests;
 
-public class BeamSplitterTest
+public class BeamSplitterTest_HalfSilvered
 {
     readonly ComplexToleranceComparer Tol = new();
 
