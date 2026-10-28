@@ -2,7 +2,8 @@ using System.Numerics;
 
 namespace Interference.Code.QuantumMaths.Components;
 
-public class BeamSource(Directions.Direction direction, Complex state) : Component(direction)
+public class BeamSource(Directions.Direction direction, Complex state, string name = "anon source")
+    : Component(direction, name)
 {
     public Complex State { get; private init; } = state;
 

@@ -25,7 +25,7 @@ public class CalculationTest
     }
     
     [Fact]
-    public void ALShapeConverges()
+    public void AnLShapeConverges()
     {
         //             -----
         //               |
@@ -49,13 +49,51 @@ public class CalculationTest
     [Fact]
     public void ACrossOfMirrorsConverges()
     {
-        //             -----
-        //               |
-        //               |      |
-        // [source]=-----\------|
-        //               |      |
-        //               |
-        //             -----
+        //                            ----- mirror1
+        //                              |
+        //                              | sideways_b_dir 
+        //                              v
+        //                               
+        //                              ^
+        //               sideways_f_dir |
+        //                              |
+        //            f_dir    b_dir   \                       |
+        // [source]=------->   <------- \ ------->   <---------| mirror2
+        //                               \  f_dir      b_dir   |
+        //                           /  |
+        //                          /   | sideways_b_dir
+        //              splitter_dir    v
+        //
+        //                              ^
+        //                              | sideways_f_dir
+        //                              | 
+        //                            ----- mirror3
+        
+        foreach (var splitter_dir in Directions.DiagonalDirections)
+        {
+            var f_dir = Directions.Add(splitter_dir, 3);
+            var b_dir = Directions.Subtract(splitter_dir, 1);
+            var sideways_f_dir = Directions.Subtract(splitter_dir, 3);
+            var sideways_b_dir = Directions.Add(splitter_dir, 1);
+
+            var source = new BeamSource(f_dir, Complex.One);
+            var splitter = new BeamSplitter(splitter_dir, Calculator.BeamSplitterType.HalfSilveredMirror);
+            var mirror1 = new FullMirror(sideways_b_dir, Calculator.MirrorType.OneSided, "m1");
+            var mirror2 = new FullMirror(b_dir, Calculator.MirrorType.OneSided, "m2");
+            var mirror3 = new FullMirror(sideways_f_dir, Calculator.MirrorType.OneSided, "m3");
+
+            splitter.Connect(source, b_dir, 1);
+            splitter.Connect(mirror1, sideways_f_dir, 1);
+            splitter.Connect(mirror2, f_dir, 1);
+            splitter.Connect(mirror3, sideways_b_dir, 1);
+
+            var passes = Calculator.Calculate([source, splitter, mirror1, mirror2, mirror3]);
+            
+            Assert.True(passes < Calculator.MAX_PASSES);
+            
+            // this is the only way out, if we have converged, we need ultimately to have come this way
+            Assert.Equal(1, source.InAmplitudes[f_dir].Magnitude, 1e-3);
+        }        
     }
     
     [Fact]
@@ -95,18 +133,18 @@ public class CalculationTest
         //                                    m3-->transmit_dir        in_dir -->m2
         //                                      \                               /
 
-        foreach (var dir in Directions.DiagonalDirections)
+        foreach (var splitter_dir in Directions.DiagonalDirections)
         {
-            var reflect_dir = Directions.Subtract(dir, 1);
-            var transmit_dir = Directions.Subtract(dir, 3);
-            var loop_dir = Directions.Add(dir, 3);
-            var in_dir = Directions.Add(dir, 1);
+            var reflect_dir = Directions.Subtract(splitter_dir, 1);
+            var transmit_dir = Directions.Subtract(splitter_dir, 3);
+            var loop_dir = Directions.Add(splitter_dir, 3);
+            var in_dir = Directions.Add(splitter_dir, 1);
 
             var source = new BeamSource(transmit_dir, Complex.One);
-            var splitter = new BeamSplitter(dir, Calculator.BeamSplitterType.HalfSilveredMirror);
-            var m1 = new FullMirror(Directions.Add(dir, 2), Calculator.MirrorType.OneSided);
-            var m2 = new FullMirror(dir, Calculator.MirrorType.OneSided);
-            var m3 = new FullMirror(Directions.Add(dir, -2), Calculator.MirrorType.OneSided);
+            var splitter = new BeamSplitter(splitter_dir, Calculator.BeamSplitterType.HalfSilveredMirror);
+            var m1 = new FullMirror(Directions.Add(splitter_dir, 2), Calculator.MirrorType.OneSided);
+            var m2 = new FullMirror(splitter_dir, Calculator.MirrorType.OneSided);
+            var m3 = new FullMirror(Directions.Add(splitter_dir, -2), Calculator.MirrorType.OneSided);
             var dest = new PassiveAbsorber();
 
             splitter.Connect(source, in_dir, 1);

@@ -12,20 +12,20 @@ public class State
 
     public MNL.Vector<Complex> Vector => InternalVector.Clone();        // horrible compromise, we need to expose Vector so we can write operator * on Matrix4x4 but MNL.Vector has no way of being made read-only
 
-    public Complex Right => InternalVector[0];
-    public Complex Up => InternalVector[1];
-    public Complex Left => InternalVector[2];
-    public Complex Down => InternalVector[3];
+    public Complex E => InternalVector[0];
+    public Complex N => InternalVector[1];
+    public Complex W => InternalVector[2];
+    public Complex S => InternalVector[3];
 
-    public State(Complex right = default, Complex up = default,
-                 Complex left = default, Complex down = default)
+    public State(Complex e = default, Complex n = default,
+                 Complex w = default, Complex s = default)
     {
         InternalVector = MNL.Vector<Complex>.Build.Dense(4);
 
-        InternalVector[0] = right;
-        InternalVector[1] = up;
-        InternalVector[2] = left;
-        InternalVector[3] = down;
+        InternalVector[0] = e;
+        InternalVector[1] = n;
+        InternalVector[2] = w;
+        InternalVector[3] = s;
     }
 
     public State(IEnumerable<Complex> values)

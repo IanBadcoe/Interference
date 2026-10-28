@@ -1,6 +1,7 @@
 namespace Interference.Code.QuantumMaths.Components;
 
-public class FullMirror(Directions.Direction direction, Calculator.MirrorType type) : Component(direction)
+public class FullMirror(Directions.Direction direction, Calculator.MirrorType type, string name = "anon mirror")
+    : Component(direction, name)
 {
     public Calculator.MirrorType Type { get; private init; } = type;
 
