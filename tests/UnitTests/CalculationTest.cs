@@ -69,31 +69,35 @@ public class CalculationTest
         //                              | 
         //                            ----- mirror3
         
-        foreach (var splitter_dir in Directions.DiagonalDirections)
+        foreach (var splitter_type in new []
+                     { Calculator.BeamSplitterType.HalfSilveredMirror, Calculator.BeamSplitterType.PrismCube })
         {
-            var f_dir = Directions.Add(splitter_dir, 3);
-            var b_dir = Directions.Subtract(splitter_dir, 1);
-            var sideways_f_dir = Directions.Subtract(splitter_dir, 3);
-            var sideways_b_dir = Directions.Add(splitter_dir, 1);
+            foreach (var splitter_dir in Directions.DiagonalDirections)
+            {
+                var f_dir = Directions.Add(splitter_dir, 3);
+                var b_dir = Directions.Subtract(splitter_dir, 1);
+                var sideways_f_dir = Directions.Subtract(splitter_dir, 3);
+                var sideways_b_dir = Directions.Add(splitter_dir, 1);
 
-            var source = new BeamSource(f_dir, Complex.One);
-            var splitter = new BeamSplitter(splitter_dir, Calculator.BeamSplitterType.HalfSilveredMirror);
-            var mirror1 = new FullMirror(sideways_b_dir, Calculator.MirrorType.OneSided, "m1");
-            var mirror2 = new FullMirror(b_dir, Calculator.MirrorType.OneSided, "m2");
-            var mirror3 = new FullMirror(sideways_f_dir, Calculator.MirrorType.OneSided, "m3");
+                var source = new BeamSource(f_dir, Complex.One);
+                var splitter = new BeamSplitter(splitter_dir, splitter_type);
+                var mirror1 = new FullMirror(sideways_b_dir, Calculator.MirrorType.OneSided, "m1");
+                var mirror2 = new FullMirror(b_dir, Calculator.MirrorType.OneSided, "m2");
+                var mirror3 = new FullMirror(sideways_f_dir, Calculator.MirrorType.OneSided, "m3");
 
-            splitter.Connect(source, b_dir, 1);
-            splitter.Connect(mirror1, sideways_f_dir, 1);
-            splitter.Connect(mirror2, f_dir, 1);
-            splitter.Connect(mirror3, sideways_b_dir, 1);
+                splitter.Connect(source, b_dir, 1);
+                splitter.Connect(mirror1, sideways_f_dir, 1);
+                splitter.Connect(mirror2, f_dir, 1);
+                splitter.Connect(mirror3, sideways_b_dir, 1);
 
-            var passes = Calculator.Calculate([source, splitter, mirror1, mirror2, mirror3]);
-            
-            Assert.True(passes < Calculator.MAX_PASSES);
-            
-            // this is the only way out, if we have converged, we need ultimately to have come this way
-            Assert.Equal(1, source.InAmplitudes[f_dir].Magnitude, 1e-3);
-        }        
+                var passes = Calculator.Calculate([source, splitter, mirror1, mirror2, mirror3]);
+
+                Assert.True(passes < Calculator.MAX_PASSES);
+
+                // this is the only way out, if we have converged, we need ultimately to have come this way
+                Assert.Equal(1, source.InAmplitudes[f_dir].Magnitude, 1e-3);
+            }
+        }
     }
     
     [Fact]
