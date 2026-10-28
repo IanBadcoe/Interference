@@ -99,7 +99,7 @@ public class CalculationTest
             }
         }
     }
-    
+
     [Fact]
     public void ASimpleLoopOfMirrorsConverges()
     {
@@ -137,42 +137,46 @@ public class CalculationTest
         //                                    m3-->transmit_dir        in_dir -->m2
         //                                      \                               /
 
-        foreach (var splitter_dir in Directions.DiagonalDirections)
+        foreach (var splitter_type in new[]
+                     { Calculator.BeamSplitterType.HalfSilveredMirror, Calculator.BeamSplitterType.PrismCube })
         {
-            var reflect_dir = Directions.Subtract(splitter_dir, 1);
-            var transmit_dir = Directions.Subtract(splitter_dir, 3);
-            var loop_dir = Directions.Add(splitter_dir, 3);
-            var in_dir = Directions.Add(splitter_dir, 1);
+            foreach (var splitter_dir in Directions.DiagonalDirections)
+            {
+                var reflect_dir = Directions.Subtract(splitter_dir, 1);
+                var transmit_dir = Directions.Subtract(splitter_dir, 3);
+                var loop_dir = Directions.Add(splitter_dir, 3);
+                var in_dir = Directions.Add(splitter_dir, 1);
 
-            var source = new BeamSource(transmit_dir, Complex.One);
-            var splitter = new BeamSplitter(splitter_dir, Calculator.BeamSplitterType.HalfSilveredMirror);
-            var m1 = new FullMirror(Directions.Add(splitter_dir, 2), Calculator.MirrorType.OneSided);
-            var m2 = new FullMirror(splitter_dir, Calculator.MirrorType.OneSided);
-            var m3 = new FullMirror(Directions.Add(splitter_dir, -2), Calculator.MirrorType.OneSided);
-            var dest = new PassiveAbsorber();
+                var source = new BeamSource(transmit_dir, Complex.One);
+                var splitter = new BeamSplitter(splitter_dir, splitter_type);
+                var m1 = new FullMirror(Directions.Add(splitter_dir, 2), Calculator.MirrorType.OneSided);
+                var m2 = new FullMirror(splitter_dir, Calculator.MirrorType.OneSided);
+                var m3 = new FullMirror(Directions.Add(splitter_dir, -2), Calculator.MirrorType.OneSided);
+                var dest = new PassiveAbsorber();
 
-            splitter.Connect(source, in_dir, 1);
-            splitter.Connect(m1, transmit_dir, 1);
-            splitter.Connect(m3, loop_dir, 1);
-            splitter.Connect(dest, reflect_dir, 1);
+                splitter.Connect(source, in_dir, 1);
+                splitter.Connect(m1, transmit_dir, 1);
+                splitter.Connect(m3, loop_dir, 1);
+                splitter.Connect(dest, reflect_dir, 1);
 
-            m1.Connect(m2, loop_dir, 1);
-            
-            m2.Connect(m3, in_dir, 1);
+                m1.Connect(m2, loop_dir, 1);
 
-            var passes = Calculator.Calculate([source, splitter, m1, m2, m3, dest]);
-            
-            Assert.True(passes < Calculator.MAX_PASSES);
-            
-            Assert.Equal(dest.InAmplitudes[loop_dir], Complex.One, Tol);
-        }        
+                m2.Connect(m3, in_dir, 1);
+
+                var passes = Calculator.Calculate([source, splitter, m1, m2, m3, dest]);
+
+                Assert.True(passes < Calculator.MAX_PASSES);
+
+                Assert.Equal(dest.InAmplitudes[loop_dir].Magnitude, Complex.One, Tol);
+            }
+        }
     }
 
     bool WithinTolerance(double x, double y, double tolerance)
     {
         return Math.Abs(x - y) <= tolerance;
     }
-    
+
     [Fact]
     public void ComplexLoopsOfMirrorsConverge()
     {
@@ -195,58 +199,69 @@ public class CalculationTest
         //
         // see ASimpleLoopOfMirrorsConverges for the names of the directions
 
-        foreach (var dir in Directions.DiagonalDirections)          // rotate the whole apparatus
+        foreach (var splitter_type in new[]
+                     { Calculator.BeamSplitterType.HalfSilveredMirror, Calculator.BeamSplitterType.PrismCube })
         {
-            var reflect_dir = Directions.Subtract(dir, 1);
-            var transmit_dir = Directions.Subtract(dir, 3);
-            var loop_dir = Directions.Add(dir, 3);
-            var in_dir = Directions.Add(dir, 1);
-
-            var source = new BeamSource(transmit_dir, Complex.One);
-            var dest = new PassiveAbsorber();
-
-            foreach(var splitter_rot in new[] { 0, 2, 4, 6 })
+            foreach (var dir in Directions.DiagonalDirections) // rotate the whole apparatus
             {
-                var splitter = new BeamSplitter(Directions.Add(dir, splitter_rot), Calculator.BeamSplitterType.HalfSilveredMirror);
-                
-                foreach(var m1_flip in new [] { 0, 4 })
+                var reflect_dir = Directions.Subtract(dir, 1);
+                var transmit_dir = Directions.Subtract(dir, 3);
+                var loop_dir = Directions.Add(dir, 3);
+                var in_dir = Directions.Add(dir, 1);
+
+                var source = new BeamSource(transmit_dir, Complex.One);
+                var dest = new PassiveAbsorber();
+
+                foreach (var splitter_rot in new[] { 0, 2, 4, 6 })
                 {
-                    var m1 = new FullMirror(Directions.Add(dir, 2 + m1_flip), Calculator.MirrorType.TwoSided);
-                    
-                    foreach(var m2_flip in new [] { 0, 4 })
+                    var splitter = new BeamSplitter(
+                        Directions.Add(dir, splitter_rot),
+                        splitter_type
+                    );
+
+                    foreach (var m1_flip in new[] { 0, 4 })
                     {
-                        var m2 = new FullMirror(Directions.Add(dir, m2_flip), Calculator.MirrorType.TwoSided);
-                        
-                        foreach(var m3_flip in new [] { 0, 4 })
+                        var m1 = new FullMirror(Directions.Add(dir, 2 + m1_flip),
+                            Calculator.MirrorType.TwoSided, "m1");
+
+                        foreach (var m2_flip in new[] { 0, 4 })
                         {
-                            var m3 = new FullMirror(Directions.Add(dir, m3_flip - 2), Calculator.MirrorType.TwoSided);
+                            var m2 = new FullMirror(Directions.Add(dir, m2_flip),
+                                Calculator.MirrorType.TwoSided, "m2");
 
-                            splitter.Connect(source, in_dir, 1);
-                            splitter.Connect(m1, transmit_dir, 1);
-                            splitter.Connect(m3, loop_dir, 1);
-                            splitter.Connect(dest, reflect_dir, 1);
+                            foreach (var m3_flip in new[] { 0, 4 })
+                            {
+                                var m3 = new FullMirror(Directions.Add(dir, m3_flip - 2),
+                                    Calculator.MirrorType.TwoSided, "m3");
 
-                            m1.Connect(m2, loop_dir, 1);
+                                splitter.Connect(source, in_dir, 1);
+                                splitter.Connect(m1, transmit_dir, 1);
+                                splitter.Connect(m3, loop_dir, 1);
+                                splitter.Connect(dest, reflect_dir, 1);
 
-                            m2.Connect(m3, in_dir, 1);
+                                m1.Connect(m2, loop_dir, 1);
 
-                            var passes = Calculator.Calculate([source, splitter, m1, m2, m3, dest]);
+                                m2.Connect(m3, in_dir, 1);
 
-                            Assert.True(passes < Calculator.MAX_PASSES);
+                                var passes = Calculator.Calculate([source, splitter, m1, m2, m3, dest]);
 
-                            // var dest_mag = dest.InAmplitudes[loop_dir].Magnitude;
-                            // var source_mag = source.InAmplitudes[transmit_dir].Magnitude;
+                                Assert.True(passes < Calculator.MAX_PASSES);
 
-                            var dest_amp = dest.InAmplitudes[loop_dir];
-                            var source_amp = source.InAmplitudes[transmit_dir];
+                                // var dest_mag = dest.InAmplitudes[loop_dir].Magnitude;
+                                // var source_mag = source.InAmplitudes[transmit_dir].Magnitude;
 
-                            // we expect an amplitude of +/- 1 coming out either towards dest, or back towards
-                            // source, depending how the phase-shifts cancel out
-                            Assert.True(WithinTolerance(Math.Abs(dest_amp.Real), 1, 1.1e-3) != WithinTolerance(Math.Abs(source_amp.Real), 1, 1.1e-3));
+                                var dest_amp = dest.InAmplitudes[loop_dir];
+                                var source_amp = source.InAmplitudes[transmit_dir];
+
+                                // we expect an amplitude of +/- 1 coming out either towards dest, or back towards
+                                // source, depending how the phase-shifts cancel out
+                                Assert.True(WithinTolerance(Math.Abs(dest_amp.Magnitude), 1, 1.1e-3)
+                                            != WithinTolerance(Math.Abs(source_amp.Magnitude), 1, 1.1e-3));
+                            }
                         }
                     }
                 }
-            }        
-        }        
+            }
+        }
     }
 }
