@@ -8,7 +8,7 @@ namespace Interference.Code.QuantumMaths;
 
 public static class Calculator
 {
-    public const int MAX_PASSES = 100;
+    public const int MAX_PASSES = 1000;
 
     public enum BeamSplitterType
     {
@@ -22,16 +22,17 @@ public static class Calculator
         TwoSided
     }
 
-    public static int Calculate(ICollection<Component> components)
+    public static int Calculate(ICollection<Component> components, int max_passes = MAX_PASSES)
     {
         var count = 0;
-        while(!CalculationStep(components) && count < MAX_PASSES)
+        while(!CalculationStep(components) && count < max_passes)
             count++;
 
         return count;
     }
 
-    private static bool CalculationStep(ICollection<Component> components)
+    // useful to be able to investigate the convergence process
+    public static bool CalculationStep(ICollection<Component> components)
     {
         foreach (var comp in components)
         {
@@ -216,7 +217,7 @@ public static class Calculator
         {
             { Complex.Zero, Complex.Zero,  Complex.One, Complex.Zero },
             { Complex.Zero, Complex.Zero, Complex.Zero, Complex.One },
-            {  Complex.One, Complex.Zero, Complex.Zero, Complex.Zero },
+            { Complex.One, Complex.Zero, Complex.Zero, Complex.Zero },
             { Complex.Zero,  Complex.One, Complex.Zero, Complex.Zero },
         };
 

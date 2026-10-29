@@ -157,7 +157,6 @@ public abstract class Component(Directions.Direction direction, string name)
         return (out_beam, in_beam);
     }
 
-    // ONLY public for unit-testing, should not need in normal code
     static Beam OutConnectInternal(Component start, Component end, Directions.Direction direction, float length)
     {
         if (start == null && end == null)

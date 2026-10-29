@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Numerics;
 using Interference.Code.QuantumMaths;
 using Interference.Code.QuantumMaths.Components;
@@ -9,7 +10,7 @@ public class CalculationTest
     // if we converge to one part in a thousand on component inputs
     // there's a leeway for a little more imprecision on component outputs
     readonly ComplexToleranceComparer Tol = new(ComplexToleranceComparer.DEFAULT_TOLERANCE * 1.1f);
-        
+
     [Fact]
     public void ASingleBeamConnectingTwoComponentsConverges()
     {
@@ -20,10 +21,10 @@ public class CalculationTest
         source.Connect(target, Directions.Direction.E, 1);
 
         Calculator.Calculate([source, target]);
-        
+
         Assert.Equal(target.InPorts[Directions.Direction.W].Start, amplitude);
     }
-    
+
     [Fact]
     public void AnLShapeConverges()
     {
@@ -33,16 +34,16 @@ public class CalculationTest
         // [source]=-----/
 
         var amplitude = new Complex(3, 4);
-        
+
         var source = new BeamSource(Directions.Direction.E, amplitude);
         var mirror = new FullMirror(Directions.Direction.NW, Calculator.MirrorType.TwoSided);
         var absorber = new PassiveAbsorber();
-        
+
         source.Connect(mirror, Directions.Direction.E, 1);
         mirror.Connect(absorber, Directions.Direction.N, 1);
 
         Calculator.Calculate([source, mirror, absorber]);
-        
+
         Assert.Equal(absorber.InPorts[Directions.Direction.S].Start, amplitude);
     }
 
@@ -68,8 +69,8 @@ public class CalculationTest
         //                              | sideways_f_dir
         //                              | 
         //                            ----- mirror3
-        
-        foreach (var splitter_type in new []
+
+        foreach (var splitter_type in new[]
                      { Calculator.BeamSplitterType.HalfSilveredMirror, Calculator.BeamSplitterType.PrismCube })
         {
             foreach (var splitter_dir in Directions.DiagonalDirections)
@@ -264,4 +265,91 @@ public class CalculationTest
             }
         }
     }
+
+    [Fact]
+    public void ChainsOfPerpendicularSplittersConverge()
+    {
+        foreach (var dir in Directions.OrthogonalDirections) // rotate the whole apparatus
+        {
+            var source = new BeamSource(dir, Complex.One);
+            var dest = new PassiveAbsorber();
+
+            foreach (var splitter_type in new[]
+                         { Calculator.BeamSplitterType.HalfSilveredMirror, Calculator.BeamSplitterType.PrismCube })
+            {
+                for (var chain_len = 2; chain_len < 10; chain_len++)
+                {
+                    List<Component> comps = [source];
+
+                    Component curr = source;
+
+                    for (var i = 0; i < chain_len; i++)
+                    {
+                        var splitter = new BeamSplitter(dir, splitter_type, $"splitter{i}");
+                        comps.Add(splitter);
+                        curr.Connect(splitter, dir, 1);
+                        curr = splitter;
+                    }
+
+                    comps.Add(dest);
+                    curr.Connect(dest, dir, 1);
+
+                    var passes = Calculator.Calculate(comps);
+
+                    Assert.True(passes < Calculator.MAX_PASSES);
+                    
+                    Debug.WriteLine($"{chain_len}:{passes}");
+                }
+            }
+        }
+    }
+    
+    // [Fact]
+    // public void ChainsOfPerpendicularSplittersExamineConvergence()
+    // {
+    //     foreach (var dir in Directions.OrthogonalDirections) // rotate the whole apparatus
+    //     {
+    //         var source = new BeamSource(dir, Complex.One);
+    //         var dest = new PassiveAbsorber();
+    //
+    //         foreach (var splitter_type in new[]
+    //                      { Calculator.BeamSplitterType.HalfSilveredMirror, Calculator.BeamSplitterType.PrismCube })
+    //         {
+    //             for (var chain_len = 2; chain_len < 10; chain_len++)
+    //             {
+    //                 List<Component> comps = [source];
+    //
+    //                 Component curr = source;
+    //
+    //                 for (var i = 0; i < chain_len; i++)
+    //                 {
+    //                     var splitter = new BeamSplitter(dir, splitter_type, $"splitter{i}");
+    //                     comps.Add(splitter);
+    //                     curr.Connect(splitter, dir, 1);
+    //                     curr = splitter;
+    //                 }
+    //
+    //                 comps.Add(dest);
+    //                 curr.Connect(dest, dir, 1);
+    //
+    //                 var passes = 0;
+    //
+    //                 while(!Calculator.CalculationStep(comps) && passes < Calculator.MAX_PASSES)
+    //                 {
+    //                     passes++;
+    //
+    //                     var s = comps.Skip(1).SkipLast(1).Aggregate("", (s, c) => s + $"{c.OutAmplitudes[dir].Magnitude:F3}:");
+    //
+    //                     var rev_dir = Directions.Reverse(dir);
+    //                     
+    //                     s = $"({source.OutAmplitudes[dir].Magnitude:F3},{source.InAmplitudes[dir].Magnitude:F3}):{s}:({dest.InAmplitudes[rev_dir].Magnitude})";
+    //                     Debug.WriteLine(s);
+    //                 }
+    //                 Debug.WriteLine("");
+    //                 
+    //                 Assert.True(passes < Calculator.MAX_PASSES);
+    //             }
+    //         }
+    //     }
+    // }
 }
