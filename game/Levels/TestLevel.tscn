@@ -31,8 +31,17 @@ position = Vector2(-64, -64)
 [node name="BeamSplitter" parent="." unique_id=1068150894 instance=ExtResource("6_voj1p")]
 position = Vector2(-32, -32)
 
+[node name="BeamSplitter2" parent="." unique_id=1775793151 instance=ExtResource("6_voj1p")]
+position = Vector2(-16, 32)
+
 [node name="OneSidedMirror" parent="." unique_id=2126690095 instance=ExtResource("7_kxr0u")]
 position = Vector2(32, -16)
 
-[node name="OneSidedMirror2" parent="." unique_id=728269202 instance=ExtResource("8_kv5fy")]
-position = Vector2(80, 16)
+[node name="OneSidedMirror2" parent="." unique_id=950969733 instance=ExtResource("7_kxr0u")]
+position = Vector2(48, 64)
+
+[node name="TwoSidedMirror" parent="." unique_id=728269202 instance=ExtResource("8_kv5fy")]
+position = Vector2(32, 32)
+
+[node name="TwoSidedMirror2" parent="." unique_id=1531900694 instance=ExtResource("8_kv5fy")]
+position = Vector2(64, 48)
