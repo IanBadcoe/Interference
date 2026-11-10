@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using System.Numerics;
 using Interference.Code.QuantumMaths;
 using Interference.Code.QuantumMaths.Components;
@@ -255,7 +254,7 @@ public class CalculationTest
                                 var source_amp = source.InAmplitudes[transmit_dir];
 
                                 // we expect an amplitude of +/- 1 coming out either towards dest, or back towards
-                                // source, depending how the phase-shifts cancel out
+                                // source, depending on how the phase-shifts cancel out
                                 Assert.True(WithinTolerance(Math.Abs(dest_amp.Magnitude), 1, 1.1e-3)
                                             != WithinTolerance(Math.Abs(source_amp.Magnitude), 1, 1.1e-3));
                             }
@@ -298,7 +297,7 @@ public class CalculationTest
 
                     Assert.True(passes < Calculator.MAX_PASSES);
                     
-                    Debug.WriteLine($"{chain_len}:{passes}");
+//                    Debug.WriteLine($"{chain_len}:{passes}");
                 }
             }
         }
