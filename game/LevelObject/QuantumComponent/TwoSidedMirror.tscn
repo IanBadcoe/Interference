@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://bxop14lk431dn" path="res://LevelObject/Grabbable.cs" id="1_x3dpk"]
 [ext_resource type="Texture2D" uid="uid://bdqi8jojsv6vc" path="res://Assets/Ian Optics Icons Try/V-Splitter-v1.png" id="2_po0pi"]
+[ext_resource type="Texture2D" uid="uid://calgd6mcpwp2s" path="res://Assets/Ian Optics Icons Try/Blue-Circle-Base.png" id="2_udtnw"]
 [ext_resource type="Script" uid="uid://dgvrdtqoebcl2" path="res://LevelObject/QuantumComponent/MirrorComponent.cs" id="3_udtnw"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_celk1"]
@@ -16,8 +17,11 @@ Sprite = NodePath("Sprite2D")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=530236245]
 shape = SubResource("RectangleShape2D_celk1")
 
+[node name="PlinthSprite" type="Sprite2D" parent="." unique_id=1125907838]
+scale = Vector2(0.016, 0.016)
+texture = ExtResource("2_udtnw")
+
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=854655997]
-rotation = 3.1415927
 scale = Vector2(0.021, 0.021)
 texture = ExtResource("2_po0pi")
 
