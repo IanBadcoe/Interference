@@ -167,7 +167,7 @@ script = ExtResource("4_ddoul")
 Player = NodePath("..")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=821619097]
-zoom = Vector2(2, 2)
+zoom = Vector2(4, 4)
 
 [node name="HoldSlot" type="Node2D" parent="." unique_id=1712876402]
 
