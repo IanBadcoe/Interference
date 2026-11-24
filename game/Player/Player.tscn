@@ -6,7 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://c5ud41ehcfopt" path="res://Assets/Download-2--Streamline-Rounded-Streamline-Material-Free.png" id="5_6ysni"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_0j2ni"]
-size = Vector2(14, 20)
+size = Vector2(14, 14)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_j23h2"]
 atlas = ExtResource("1_3qydi")
@@ -162,7 +162,7 @@ position = Vector2(0, -6)
 sprite_frames = SubResource("SpriteFrames_4gjug")
 animation = &"idle"
 centered = false
-offset = Vector2(-16, -16)
+offset = Vector2(-16, -18)
 script = ExtResource("4_ddoul")
 Player = NodePath("..")
 
@@ -173,5 +173,4 @@ zoom = Vector2(4, 4)
 
 [node name="PlacementPreview" type="Sprite2D" parent="." unique_id=979009321]
 self_modulate = Color(0, 0, 0, 1)
-scale = Vector2(0.5, 0.5)
 texture = ExtResource("5_6ysni")

@@ -39,6 +39,12 @@ public partial class PlayerCharacter : CharacterBody2D
     public int MovementSpeed { get; set; } = 100;
 
     public float LastMovementDirection { get; private set; } = 0;
+    
+    /// <summary>
+    /// Direction we were facing when we picked up our last held item; we will continue to hold it out in this direction
+    /// (and place it in that direction from us) regardless of what direction we move in
+    /// </summary>
+    public float HoldDirection { get; private set; } = 0;
 
     public Grabbable Held { get; private set; }
 
@@ -101,9 +107,9 @@ public partial class PlayerCharacter : CharacterBody2D
 
         if (Held != null)
         {
-            var position = GetGlobalPosition() + Vector2.FromAngle(LastMovementDirection) * PlacementDistance;
-
-            var cellCentre = new Vector2((float)Math.Round((position.X / Globals.CellSize)) * Globals.CellSize,
+            var position = GetGlobalPosition() + Vector2.FromAngle(HoldDirection) * PlacementDistance;
+            
+            var cellCentre = new Vector2((float)Math.Round(position.X / Globals.CellSize) * Globals.CellSize,
                 (float)Math.Round(position.Y / Globals.CellSize) * Globals.CellSize);
 
             PlacementPreview.SetGlobalPosition(cellCentre);
@@ -117,8 +123,6 @@ public partial class PlayerCharacter : CharacterBody2D
         ProcessInput();
         MoveAndSlide();
 
-        HoldSlot.SetPosition(Vector2.FromAngle(LastMovementDirection) * HoldDistance);
-
         var spaceState = GetWorld2D().DirectSpaceState;
 
         if (IsHoldingObject)
@@ -128,6 +132,10 @@ public partial class PlayerCharacter : CharacterBody2D
             parameters.Transform = new Transform2D(0, Vector2.Zero, 0, PlacementPreview.GetGlobalPosition());
             parameters.CollisionMask = (uint)CollisionLayers.PlayerMovement;
             _canPutDown = spaceState.IntersectShape(parameters, 1).Count == 0;
+        }
+        else
+        {
+            HoldSlot.SetPosition(Vector2.FromAngle(LastMovementDirection) * HoldDistance);
         }
 
         if (_attemptUse)
@@ -158,6 +166,8 @@ public partial class PlayerCharacter : CharacterBody2D
                     Held = grabbable;
                     Held.Reparent(HoldSlot, false);
                     Held.SetPosition(Vector2.Zero);
+
+                    HoldDirection = LastMovementDirection;
 
                     grabbable.OnGrabbed();
                 }

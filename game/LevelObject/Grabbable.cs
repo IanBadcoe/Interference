@@ -15,7 +15,7 @@ public partial class Grabbable : StaticBody2D
 	public Sprite2D Sprite { get; private set; }
 
 	[Export]
-	public int RotationIncrementDegrees { get; set; } = 45; // TODO: Rotate controls
+	public int RotationIncrementDegrees { get; set; } = 45;
 	
 	private uint _originalCollisionLayers = 0;
 	
