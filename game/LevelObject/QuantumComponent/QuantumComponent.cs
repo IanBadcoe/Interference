@@ -16,7 +16,7 @@ public abstract partial class QuantumComponent : Node2D
     [Export]
     private PhysicsBody2D _objectRoot;
     
-    protected Component Component;
+    public Component Component { get; protected set; }
 
 #nullable enable
     private readonly Dictionary<Directions.Direction, (LaserBeam beam, QuantumComponent? component, PassiveAbsorber? syntheticAbsorber)> _connections = [];
