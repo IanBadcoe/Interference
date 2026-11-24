@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://ywf4bpprikiy" path="res://LevelObject/QuantumComponent/BeamSplitter.tscn" id="6_voj1p"]
 [ext_resource type="PackedScene" uid="uid://mkf4keayogt0" path="res://LevelObject/QuantumComponent/OneSidedMirror.tscn" id="7_kxr0u"]
 [ext_resource type="PackedScene" uid="uid://dlrbihqywf4g3" path="res://LevelObject/QuantumComponent/TwoSidedMirror.tscn" id="8_kv5fy"]
+[ext_resource type="PackedScene" uid="uid://gmppn6b84q5p" path="res://LevelObject/QuantumComponent/Detector.tscn" id="9_jeepb"]
 
 [node name="TestLevel" type="Node2D" unique_id=1527001300]
 script = ExtResource("1_2yvdw")
@@ -45,3 +46,6 @@ position = Vector2(32, 32)
 
 [node name="TwoSidedMirror2" parent="." unique_id=1531900694 instance=ExtResource("8_kv5fy")]
 position = Vector2(64, 48)
+
+[node name="Detector" parent="." unique_id=25212746 instance=ExtResource("9_jeepb")]
+position = Vector2(-64, 32)

@@ -1,5 +1,7 @@
 using Godot;
 
+namespace Interference.LevelObject;
+
 public partial class Grabbable : StaticBody2D
 {
 	[Signal]

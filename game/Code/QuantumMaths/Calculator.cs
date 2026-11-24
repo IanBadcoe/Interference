@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using Godot;
+using MathNet.Numerics;
 
 namespace Interference.Code.QuantumMaths;
 
@@ -222,5 +223,10 @@ public static class Calculator
         };
 
         return new(values);
+    }
+
+    public static bool ComplexEquality(Complex expected, Complex actual, float threshold = 0)
+    {
+        return (actual - expected).MagnitudeSquared() < threshold * threshold;
     }
 }

@@ -40,7 +40,7 @@ public partial class PlayerCharacter : CharacterBody2D
 
     public float LastMovementDirection { get; private set; } = 0;
 
-    public Grabbable Held { get; private set; }
+    public LevelObject.Grabbable Held { get; private set; }
 
     public bool IsHoldingObject => Held != null;
 
@@ -151,7 +151,7 @@ public partial class PlayerCharacter : CharacterBody2D
 
                 var result = spaceState.IntersectRay(query);
 
-                var grabbable = result.GetValueOrDefault("collider").As<Grabbable>();
+                var grabbable = result.GetValueOrDefault("collider").As<LevelObject.Grabbable>();
 
                 if (grabbable != null)
                 {
